@@ -15,11 +15,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   
-  // Don't show navbar on login or register pages
-  if (location.pathname === '/login' || location.pathname === '/register') {
-    return null;
-  }
-  
   // Define scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -30,9 +25,17 @@ const Navbar = () => {
       }
     };
     
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Only add the event listener if we're not on login/register pages
+    if (location.pathname !== '/login' && location.pathname !== '/register') {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [location.pathname]);
+  
+  // Don't show navbar on login or register pages
+  if (location.pathname === '/login' || location.pathname === '/register') {
+    return null;
+  }
   
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
