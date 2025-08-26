@@ -32,46 +32,56 @@ const RegisterPage = () => {
   };
   
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1>Register</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
+      <div className="max-w-md w-full bg-white dark:bg-dark-bg rounded-xl shadow-lg p-8">
+        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Create Account</h1>
         
-        {error && <div className="error-message">{error}</div>}
-        {passwordError && <div className="error-message">{passwordError}</div>}
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md text-sm">
+            {error}
+          </div>
+        )}
+        {passwordError && (
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md text-sm">
+            {passwordError}
+          </div>
+        )}
         
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">
-              <FaUser className="icon" />
-            </label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaUser className="text-gray-400" />
+            </div>
             <input
               type="text"
               id="name"
-              placeholder="Name"
+              placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="email">
-              <FaEnvelope className="icon" />
-            </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaEnvelope className="text-gray-400" />
+            </div>
             <input
               type="email"
               id="email"
-              placeholder="Email"
+              placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="password">
-              <FaLock className="icon" />
-            </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaLock className="text-gray-400" />
+            </div>
             <input
               type="password"
               id="password"
@@ -80,13 +90,14 @@ const RegisterPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength="6"
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="confirmPassword">
-              <FaLock className="icon" />
-            </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaLock className="text-gray-400" />
+            </div>
             <input
               type="password"
               id="confirmPassword"
@@ -95,20 +106,25 @@ const RegisterPage = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               minLength="6"
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
             />
           </div>
           
           <button 
             type="submit" 
-            className="auth-button" 
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-white bg-primary-purple hover:bg-opacity-90 focus:outline-none transition-colors mt-6"
             disabled={loading}
           >
-            {loading ? <FaSpinner className="spinner" /> : 'Register'}
+            {loading ? (
+              <FaSpinner className="animate-spin h-5 w-5" />
+            ) : (
+              'Register'
+            )}
           </button>
         </form>
         
-        <div className="auth-redirect">
-          Already have an account? <Link to="/login">Login</Link>
+        <div className="mt-6 text-center text-gray-600 dark:text-gray-300">
+          Already have an account? <Link to="/login" className="text-primary-purple hover:underline">Login</Link>
         </div>
       </div>
     </div>

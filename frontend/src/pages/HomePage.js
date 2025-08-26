@@ -10,26 +10,28 @@ const HomePage = () => {
   const { loading, error } = useContext(TodoContext);
   
   return (
-    <div className="home-page">
-      <div className="todo-app">
-        <h1 className="app-title">Get Things Done!</h1>
+    <div className="min-h-screen pt-20 pb-12 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-2xl mx-auto bg-white dark:bg-dark-bg rounded-xl shadow-lg p-6 md:p-8">
+        <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Get Things Done!</h1>
         <TodoForm />
         
-        <div className="todo-actions">
+        <div className="mt-8">
           <SearchBox />
           <FilterButtons />
         </div>
         
         {loading ? (
-          <div className="loader">
-            <FaSpinner className="loader-spinner" />
+          <div className="flex justify-center items-center my-16">
+            <FaSpinner className="animate-spin h-8 w-8 text-primary-purple" />
           </div>
         ) : (
           <TodoList />
         )}
         
         {error && (
-          <div className="error-message">{error}</div>
+          <div className="mt-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md">
+            {error}
+          </div>
         )}
       </div>
     </div>

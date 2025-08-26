@@ -22,7 +22,7 @@ const TodoList = () => {
   };
 
   if (filteredTasks.length === 0) {
-    return <p className="no-tasks">No tasks found.</p>;
+    return <p className="text-center text-gray-500 dark:text-gray-400 py-8">No tasks found.</p>;
   }
 
   return (
@@ -30,7 +30,7 @@ const TodoList = () => {
       <Droppable droppableId="tasks-list">
         {(provided) => (
           <ul 
-            className="tasks-list"
+            className="mt-6 space-y-3"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
@@ -45,7 +45,7 @@ const TodoList = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={snapshot.isDragging ? "dragging" : ""}
+                    className={snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""}
                   >
                     <TodoItem task={task} />
                   </div>

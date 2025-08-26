@@ -17,9 +17,9 @@ function App() {
   const { theme } = useContext(ThemeContext);
   
   return (
-    <div className={`App ${theme}`}>
+    <div className={`min-h-screen flex flex-col ${theme}`}>
       <Navbar />
-      <div className="container">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 pt-16 sm:px-6 md:pt-20 lg:px-8">
         <Routes>
           <Route 
             path="/" 
