@@ -1,39 +1,45 @@
 import React, { useContext } from 'react';
-import TodoList from './components/TodoList';
-import TodoForm from './components/TodoForm';
-import SearchBox from './components/SearchBox';
-import FilterButtons from './components/FilterButtons';
-import { TodoContext } from './context/TodoContext';
+import { Routes, Route } from 'react-router-dom';
 import { ThemeContext } from './context/ThemeContext';
+
+// Pages
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
+
+// Components
+import Navbar from './components/Navbar';
 import ThemeToggle from './components/ThemeToggle';
-import { FaSpinner } from 'react-icons/fa';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const { loading, error } = useContext(TodoContext);
   const { theme } = useContext(ThemeContext);
   
   return (
     <div className={`App ${theme}`}>
+      <Navbar />
       <div className="container">
-        <div className="todo-app">
-          <h1 className="app-title">Get Things Done!</h1>
-          <TodoForm />
-          
-          <SearchBox />
-          <FilterButtons />
-          
-          {loading ? (
-            <div className="loader">
-              <FaSpinner className="loader-spinner" />
-            </div>
-          ) : (
-            <TodoList />
-          )}
-          
-          {error && (
-            <div className="error-message">{error}</div>
-          )}
-        </div>
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <PrivateRoute>
+                <HomePage />
+              </PrivateRoute>
+            } 
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route 
+            path="/profile" 
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            } 
+          />
+        </Routes>
       </div>
       <ThemeToggle />
     </div>
