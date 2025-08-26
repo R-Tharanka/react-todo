@@ -31,8 +31,7 @@ const Navbar = () => {
   
   return (
     <nav className={`fixed top-0 left-0 right-0 bg-white dark:bg-dark-bg shadow-md z-50 ${theme}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-space-evenly h-16  mx-auto">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <FaTasks className="h-6 w-6 text-primary-purple" />
@@ -91,7 +90,6 @@ const Navbar = () => {
               </div>
             )}
           </div>
-        </div>
       </div>
 
       {/* Mobile menu */}
