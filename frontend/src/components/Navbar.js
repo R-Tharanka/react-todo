@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
-import { FaUser, FaSignOutAlt, FaUserEdit, FaSearch, FaTasks, FaBars, FaTimes } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaUserEdit, FaTasks, FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
@@ -9,19 +9,12 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   
   // Don't show navbar on login or register pages
   if (location.pathname === '/login' || location.pathname === '/register') {
     return null;
   }
-  
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // Handle search functionality
-    console.log('Searching for:', searchQuery);
-  };
   
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -56,20 +49,7 @@ const Navbar = () => {
             </button>
           </div>
           
-          <div className={`hidden md:flex items-center justify-between flex-1 ml-10`}>
-            <form onSubmit={handleSearch} className="relative max-w-lg w-full">
-              <input 
-                type="text" 
-                placeholder="Search tasks..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 pl-10 rounded-full bg-gray-100 dark:bg-opacity-20 dark:bg-black text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
-              />
-              <button type="submit" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <FaSearch className="h-4 w-4" />
-              </button>
-            </form>
-            
+          <div className={`hidden md:flex items-center justify-end flex-1 ml-10`}>
             {user ? (
               <div className="relative ml-4">
                 <div 
@@ -117,19 +97,6 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div className={`md:hidden ${showMenu ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1">
-          <form onSubmit={handleSearch} className="relative mb-3">
-            <input 
-              type="text" 
-              placeholder="Search tasks..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 pl-10 rounded-md bg-gray-100 dark:bg-opacity-20 dark:bg-black text-gray-800 dark:text-white focus:outline-none"
-            />
-            <button type="submit" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <FaSearch className="h-4 w-4" />
-            </button>
-          </form>
-          
           {user ? (
             <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center px-5">
