@@ -21,7 +21,10 @@ mongoose
 
 // Routes
 const taskRoutes = require('./routes/tasks');
+const userRoutes = require('./routes/users');
+
 app.use('/api/tasks', taskRoutes);
+app.use('/api/users', userRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
