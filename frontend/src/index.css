@@ -7,12 +7,14 @@
     @apply font-['Poppins',_sans-serif] bg-fixed min-h-screen;
   }
 
+  /* Light mode gradient with specified colors */
   body {
-    @apply bg-gradient-to-br from-purple-200 to-indigo-300;
+    background: linear-gradient(135deg, rgba(152, 50, 245, 0.6), rgba(93, 86, 168, 0.8));
   }
 
+  /* Dark mode gradient with deeper colors */
   .dark body {
-    @apply bg-gradient-to-br from-purple-700 to-indigo-900;
+    background: linear-gradient(135deg, rgba(152, 50, 245, 0.8), rgba(93, 86, 168, 1));
   }
   
   /* Custom animation */
@@ -50,11 +52,28 @@
   
   /* Theme transition */
   .theme-transition {
-    @apply transition-all duration-300;
+    transition: all 0.3s ease;
   }
   
   /* Custom gradient buttons */
   .btn-gradient {
-    @apply bg-gradient-to-r from-primary-purple to-accent hover:opacity-90 text-white transition-all duration-200;
+    background: linear-gradient(to right, #9832f5, #5d56a8);
+    color: white;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-gradient:hover {
+    opacity: 0.9;
+  }
+  
+  /* Add task button with specific color */
+  .btn-add-task {
+    background-color: #8732d8;
+    color: white;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-add-task:hover {
+    opacity: 0.9;
   }
 }

@@ -25,33 +25,33 @@ const TodoItem = ({ task }) => {
   };
 
   return (
-    <li className="bg-white dark:bg-card-bg rounded-lg shadow-sm p-4 flex items-center border-l-4 border-primary-purple transition-all hover:shadow-md">
+    <li className="bg-gradient-to-r from-primary-purple to-secondary-purple rounded-lg shadow-md p-4 flex items-center transition-all hover:shadow-lg">
       <div 
         className={`h-6 w-6 flex items-center justify-center rounded mr-3 cursor-pointer transition-colors ${
           task.completed 
-            ? 'bg-primary-purple' 
-            : 'border-2 border-gray-300 dark:border-gray-600'
+            ? 'bg-white' 
+            : 'border-2 border-white'
         }`}
         onClick={() => toggleComplete(task._id)}
         role="checkbox"
         aria-checked={task.completed}
         tabIndex={0}
       >
-        {task.completed && <FaCheck className="text-white text-sm" />}
+        {task.completed && <FaCheck className="text-primary-purple text-sm" />}
       </div>
 
       {isEditing ? (
         <input
           type="text"
-          className="flex-grow bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded border-none focus:ring-2 focus:ring-primary-purple focus:outline-none"
+          className="flex-grow text-white bg-opacity-20 bg-white px-3 py-1 rounded border-none focus:ring-2 focus:ring-white focus:outline-none"
           value={editText}
           onChange={(e) => setEditText(e.target.value)}
           autoFocus
           onKeyDown={(e) => e.key === 'Enter' && handleSave()}
         />
       ) : (
-        <p className={`flex-grow text-gray-800 dark:text-gray-200 ${
-          task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
+        <p className={`flex-grow text-white ${
+          task.completed ? 'line-through opacity-70' : ''
         }`}>
           {task.text}
         </p>
@@ -63,14 +63,14 @@ const TodoItem = ({ task }) => {
             <button 
               onClick={handleSave} 
               aria-label="Save"
-              className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 p-1"
+              className="text-white hover:text-gray-200 p-1 transition-colors"
             >
               <FaSave />
             </button>
             <button 
               onClick={handleCancel} 
               aria-label="Cancel"
-              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-1"
+              className="text-white hover:text-gray-200 p-1 transition-colors"
             >
               <FaTimes />
             </button>
@@ -80,14 +80,14 @@ const TodoItem = ({ task }) => {
             <button 
               onClick={handleEdit} 
               aria-label="Edit"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1"
+              className="text-white hover:text-gray-200 p-1 transition-colors"
             >
               <FaEdit />
             </button>
             <button 
               onClick={() => deleteTask(task._id)} 
               aria-label="Delete"
-              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-1"
+              className="text-white hover:text-gray-200 p-1 transition-colors"
             >
               <FaTrash />
             </button>

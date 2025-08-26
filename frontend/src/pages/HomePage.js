@@ -10,9 +10,9 @@ const HomePage = () => {
   const { loading, error } = useContext(TodoContext);
   
   return (
-    <div className="min-h-screen pt-20 pb-12 px-4 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-2xl mx-auto bg-white dark:bg-dark-bg rounded-xl shadow-lg p-6 md:p-8">
-        <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Get Things Done!</h1>
+    <div className="min-h-screen pt-20 pb-12 px-4">
+      <div className="max-w-2xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8">
+        <h1 className="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-purple to-secondary-purple mb-6">Get Things Done!</h1>
         <TodoForm />
         
         <div className="mt-8">
