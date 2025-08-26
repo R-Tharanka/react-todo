@@ -4,13 +4,19 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/index.html"
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         'primary-purple': '#8b5cf6',
+        'primary-hover': '#7c3aed',
         'secondary-purple': '#6d28d9',
-        'dark-bg': '#1e1b4b',
+        'dark-bg': '#121212',
+        'dark-card': '#1e1e1e',
+        'light-bg': '#f9fafb',
+        'light-card': '#ffffff',
         'card-bg': '#312e81',
+        'accent': '#c084fc',
         'success': '#10b981',
         'error': '#ef4444'
       },

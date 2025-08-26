@@ -4,7 +4,15 @@
 
 @layer base {
   body {
-    @apply font-['Poppins',_sans-serif] bg-gradient-to-br from-purple-500 to-indigo-600 bg-fixed min-h-screen;
+    @apply font-['Poppins',_sans-serif] bg-fixed min-h-screen;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-purple-200 to-indigo-300;
+  }
+
+  .dark body {
+    @apply bg-gradient-to-br from-purple-700 to-indigo-900;
   }
   
   /* Custom animation */
@@ -38,5 +46,15 @@
   /* Task item animation */
   .task-appear {
     animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Theme transition */
+  .theme-transition {
+    @apply transition-all duration-300;
+  }
+  
+  /* Custom gradient buttons */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary-purple to-accent hover:opacity-90 text-white transition-all duration-200;
   }
 }
