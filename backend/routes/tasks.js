@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const { protect } = require('../middleware/authMiddleware');
 
-// GET all tasks
+// Apply auth middleware to all routes
+router.use(protect);
+
+// GET all tasks for logged in user
 router.get('/', async (req, res) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
+    const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -15,7 +19,11 @@ router.get('/', async (req, res) => {
 // GET single task
 router.get('/:id', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    });
+    
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
@@ -34,7 +42,8 @@ router.post('/', async (req, res) => {
     
     const newTask = new Task({
       text: req.body.text,
-      completed: req.body.completed || false
+      completed: req.body.completed || false,
+      user: req.user._id
     });
     
     const savedTask = await newTask.save();
@@ -51,8 +60,9 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ message: 'Task text cannot be empty' });
     }
     
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
+    // Find task by id and user id to ensure users can only update their own tasks
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
       { 
         text: req.body.text,
         completed: req.body.completed !== undefined ? req.body.completed : undefined
@@ -73,7 +83,7 @@ router.put('/:id', async (req, res) => {
 // PATCH toggle task completion
 router.patch('/:id/toggle', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -91,7 +101,7 @@ router.patch('/:id/toggle', async (req, res) => {
 // DELETE a task
 router.delete('/:id', async (req, res) => {
   try {
-    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+    const deletedTask = await Task.findOneAndDelete({ _id: req.params.id, user: req.user._id });
     
     if (!deletedTask) {
       return res.status(404).json({ message: 'Task not found' });

@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';
 
 export const TodoContext = createContext();
 
@@ -11,29 +12,40 @@ export const TodoProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useContext(AuthContext);
   
-  // Load tasks from localStorage on initial render
+  // Load tasks when user is authenticated
   useEffect(() => {
-    const storedTasks = localStorage.getItem('tasks');
-    if (storedTasks) {
-      try {
-        setTasks(JSON.parse(storedTasks));
-      } catch (error) {
-        console.error('Error parsing tasks from localStorage:', error);
+    if (user) {
+      // Load tasks from localStorage on initial render
+      const storedTasks = localStorage.getItem(`tasks-${user._id}`);
+      if (storedTasks) {
+        try {
+          setTasks(JSON.parse(storedTasks));
+        } catch (error) {
+          console.error('Error parsing tasks from localStorage:', error);
+        }
       }
+      
+      // Then fetch from API
+      fetchTasks();
+    } else {
+      // Clear tasks when logged out
+      setTasks([]);
     }
-    
-    // Then fetch from API
-    fetchTasks();
-  }, []);
+  }, [user]);
   
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
+    if (user) {
+      localStorage.setItem(`tasks-${user._id}`, JSON.stringify(tasks));
+    }
+  }, [tasks, user]);
   
   // Fetch all tasks from the API
   const fetchTasks = async () => {
+    if (!user) return;
+    
     setLoading(true);
     try {
       const response = await axios.get(API_URL);
