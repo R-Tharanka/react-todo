@@ -93,7 +93,7 @@
     animation: fadeIn 0.3s ease-in-out;
   }
 
-  /* Custom scrollbar styling */
+  /* Custom scrollbar styling - very dark theme */
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
     height: 0;
@@ -101,32 +101,37 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(229, 231, 235, 0.5);
+    background: rgba(30, 30, 40, 0.4);
     border-radius: 10px;
   }
 
   .dark .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(75, 85, 99, 0.3);
+    background: rgba(20, 20, 30, 0.7);
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(152, 50, 245, 0.8);
+    background: rgba(90, 30, 160, 0.95);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(152, 50, 245, 1);
+    background: rgba(120, 40, 210, 1);
     background-clip: padding-box;
   }
 
-  /* For Firefox */
+  /* For Firefox - darker theme */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(152, 50, 245, 0.8) rgba(229, 231, 235, 0.5);
+    scrollbar-color: rgba(90, 30, 160, 0.95) rgba(30, 30, 40, 0.4);
     overflow-x: hidden;
     /* Ensure no horizontal scroll */
+  }
+  
+  /* Firefox scrollbar for dark mode */
+  .dark .custom-scrollbar {
+    scrollbar-color: rgba(90, 30, 160, 0.95) rgba(20, 20, 30, 0.7);
   }
 
   /* Scrolling indicator animation */

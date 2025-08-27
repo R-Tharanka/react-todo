@@ -4,7 +4,8 @@ import { TodoContext } from '../context/TodoContext';
 import { FaUser, FaEnvelope, FaLock, FaCamera, FaSpinner, FaCheck, FaClock, FaCalendarCheck, FaTasks, FaCog, FaBell } from 'react-icons/fa';
 
 const ProfilePage = () => {
-  const { user, updateProfile, loading, error } = useContext(AuthContext);
+  const { user, updateProfile, loading, error: authError } = useContext(AuthContext);
+  const [error, setError] = useState('');
   const { tasks } = useContext(TodoContext);
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -26,6 +27,13 @@ const ProfilePage = () => {
     dueToday: 0
   });
   
+  // Sync auth errors with local error state
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    }
+  }, [authError]);
+
   useEffect(() => {
     if (tasks && tasks.length > 0) {
       // Current date for comparison
@@ -64,8 +72,9 @@ const ProfilePage = () => {
       if (isValidUrl) {
         setSuccessMessage('Avatar URL updated. Save changes to confirm.');
         setPasswordError(''); // Clear any previous errors
+        setError(''); // Clear any previous errors
       } else {
-        setPasswordError('Please enter a valid image URL');
+        setError('Please enter a valid image URL');
         setSuccessMessage('');
       }
       
@@ -73,6 +82,7 @@ const ProfilePage = () => {
       setTimeout(() => {
         setSuccessMessage('');
         setPasswordError('');
+        setError('');
       }, 3000);
     }
   };
@@ -116,8 +126,14 @@ const ProfilePage = () => {
       setTimeout(() => {
         setSuccessMessage('');
       }, 3000);
-    } catch (error) {
-      // Error already handled in context
+    } catch (err) {
+      // Set local error state
+      setError(err.message || 'Profile update failed');
+      
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setError('');
+      }, 5000);
     }
   };
   
@@ -224,11 +240,11 @@ const ProfilePage = () => {
           </div>
           
           {/* Error/Success Messages */}
-          {error && (
+          {(error || authError) && (
             <div className="mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md flex items-center justify-between animate-fadeIn">
               <div className="flex items-center">
                 <span className="mr-2 text-red-600 dark:text-red-400">⚠️</span>
-                {error}
+                {error || authError}
               </div>
               <button 
                 onClick={() => setError('')}

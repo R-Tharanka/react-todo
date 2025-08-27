@@ -78,7 +78,7 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
       <Droppable droppableId="tasks-list">
         {(provided) => (
           <ul 
-            className="mt-6 space-y-3 w-full px-1"
+            className="mt-6 space-y-3 w-full px-1 custom-scrollbar"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
