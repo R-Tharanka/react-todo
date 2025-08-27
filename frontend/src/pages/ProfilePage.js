@@ -16,8 +16,7 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [notificationsEnabled, setNotificationsEnabled] = useState(user?.preferences?.notifications || false);
   const [darkModePreference, setDarkModePreference] = useState(user?.preferences?.darkMode || 'system');
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || '');
+  // Use URL-based avatar only
   
   // Calculate task statistics
   const [taskStats, setTaskStats] = useState({
@@ -53,45 +52,29 @@ const ProfilePage = () => {
     }
   }, [tasks]);
 
-  // Handle avatar file upload
+  // Handle avatar URL change with basic validation
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const url = e.target.value;
+    setAvatar(url);
     
-    // Validate file type
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!validImageTypes.includes(file.type)) {
-      setError('Please select a valid image file (JPEG, PNG, GIF, or WEBP)');
-      return;
-    }
-    
-    // Validate file size (max 2MB)
-    const maxSize = 2 * 1024 * 1024; // 2MB
-    if (file.size > maxSize) {
-      setError('Image file size must be less than 2MB');
-      return;
-    }
-    
-    setAvatarFile(file);
-    
-    // Create a preview URL for the image
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result);
-      // Clear any previous errors
-      setError('');
-      // Show success message
-      setSuccessMessage('Avatar preview updated. Save changes to confirm.');
+    if (url) {
+      // Basic URL validation
+      const isValidUrl = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i.test(url);
       
-      // Clear success message after 3 seconds
+      if (isValidUrl) {
+        setSuccessMessage('Avatar URL updated. Save changes to confirm.');
+        setPasswordError(''); // Clear any previous errors
+      } else {
+        setPasswordError('Please enter a valid image URL');
+        setSuccessMessage('');
+      }
+      
+      // Clear messages after 3 seconds
       setTimeout(() => {
         setSuccessMessage('');
+        setPasswordError('');
       }, 3000);
-    };
-    reader.onerror = () => {
-      setError('Failed to read image file');
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -110,7 +93,7 @@ const ProfilePage = () => {
     const userData = {
       name,
       email,
-      avatar: avatarFile ? avatarPreview : avatar,
+      avatar: avatar,
       preferences: {
         notifications: notificationsEnabled,
         darkMode: darkModePreference
@@ -144,24 +127,39 @@ const ProfilePage = () => {
         <div className="bg-white dark:bg-card-bg rounded-xl shadow-lg p-4 md:p-6 mb-8">
           {/* User header with avatar and name */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 animate-fadeIn">
-            <div className="relative group">
-              <div className={`w-28 h-28 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex items-center justify-center border-4 border-primary-purple group-hover:opacity-80 transition-opacity shadow-lg hover:shadow-xl transition-shadow ${avatarFile ? 'avatar-success' : 'animate-[profilePulse_2s_ease-in-out_infinite]'}`}>
-                {avatarPreview ? (
-                  <img src={avatarPreview} alt={name} className="w-full h-full object-cover" />
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-28 h-28 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex items-center justify-center border-4 border-primary-purple shadow-lg hover:shadow-xl transition-shadow animate-[profilePulse_2s_ease-in-out_infinite]">
+                {avatar ? (
+                  <img 
+                    src={avatar} 
+                    alt={name} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '';
+                      setAvatar('');
+                    }} 
+                  />
                 ) : (
                   <FaUser size={48} className="text-gray-400" />
                 )}
               </div>
-              <label htmlFor="avatar-upload" className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <FaCamera size={24} className="text-white" />
-              </label>
-              <input
-                type="file"
-                id="avatar-upload"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className="hidden"
-              />
+              <div className="w-full">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-gray-600 dark:text-gray-400 flex items-center">
+                    <FaCamera className="mr-1" /> Avatar URL
+                  </label>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      placeholder="https://example.com/avatar.jpg"
+                      value={avatar}
+                      onChange={handleAvatarChange}
+                      className="w-full px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-purple"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div className="text-center md:text-left flex-1">
