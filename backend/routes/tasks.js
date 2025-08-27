@@ -85,9 +85,13 @@ router.get('/:id', async (req, res) => {
 // POST create a task
 router.post('/', async (req, res) => {
   try {
+    // Validate required fields
     if (!req.body.text || req.body.text.trim() === '') {
       return res.status(400).json({ message: 'Task text is required' });
     }
+    
+    // Log incoming request data for debugging
+    console.log('Creating new task with data:', req.body);
     
     const newTask = new Task({
       text: req.body.text,
@@ -98,9 +102,14 @@ router.post('/', async (req, res) => {
       category: req.body.category || null
     });
     
+    // Log task object before saving
+    console.log('Task object to be saved:', newTask);
+    
     const savedTask = await newTask.save();
+    console.log('Task saved successfully:', savedTask);
     res.status(201).json(savedTask);
   } catch (error) {
+    console.error('Error creating task:', error);
     res.status(400).json({ message: error.message });
   }
 });

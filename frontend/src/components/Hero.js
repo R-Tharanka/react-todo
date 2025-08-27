@@ -4,15 +4,17 @@ import { Link } from 'react-router-dom';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
 import { FaCheckCircle, FaHourglassHalf, FaCalendar, FaFlag } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const Hero = () => {
-  const { tasks, addTask } = useContext(TodoContext);
+  const { tasks, addTask, error } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
   const [newTaskText, setNewTaskText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [dueDate, setDueDate] = useState('');
   const [priority, setPriority] = useState('medium');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const taskInputRef = useRef(null);
   
   // Calculate task statistics
@@ -48,20 +50,35 @@ const Hero = () => {
   };
 
   // Handle quick task creation
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (newTaskText.trim()) {
+      setIsSubmitting(true);
       const priorityValue = getPriorityValue(priority);
       const dueDateValue = dueDate ? new Date(dueDate).toISOString() : null;
       
-      // Make sure to pass all properties: text, dueDate, priority, and category
-      addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
-      
-      // Reset form fields
-      setNewTaskText('');
-      setSelectedCategory('');
-      setDueDate('');
-      setPriority('medium');
-      setIsInputFocused(false);
+      try {
+        // Make sure to pass all properties: text, dueDate, priority, and category
+        const success = await addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
+        
+        if (success) {
+          toast.success('Task added successfully!');
+          
+          // Reset form fields
+          setNewTaskText('');
+          setSelectedCategory('');
+          setDueDate('');
+          setPriority('medium');
+          setIsInputFocused(false);
+        } else {
+          toast.error('Failed to add task. Please try again.');
+        }
+      } catch (err) {
+        toast.error('An error occurred. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      toast.warning('Task text cannot be empty!');
     }
   };
   
@@ -190,9 +207,15 @@ const Hero = () => {
               <button 
                 className={`${user ? 'bg-primary-purple hover:bg-primary-hover' : 'bg-gray-400 cursor-not-allowed'} text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all`}
                 onClick={user ? handleAddTask : undefined}
-                disabled={!user}
+                disabled={!user || isSubmitting}
               >
-                <span className="text-xl">+</span> Add Task
+                {isSubmitting ? (
+                  <span>Adding...</span>
+                ) : (
+                  <>
+                    <span className="text-xl">+</span> Add Task
+                  </>
+                )}
               </button>
             </div>
             

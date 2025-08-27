@@ -37,7 +37,7 @@ export const TodoProvider = ({ children }) => {
       // Clear tasks when logged out
       setTasks([]);
     }
-  }, [user, filter, sortBy]);
+  }, [user]);
   
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
@@ -90,36 +90,32 @@ export const TodoProvider = ({ children }) => {
   const addTask = async (text, dueDate = null, priority = 0, category = '') => {
     if (!text || text.trim() === '') {
       setError('Task text cannot be empty!');
-      return;
+      return false;
     }
     
     setLoading(true);
     try {
+      // Create task data object with all properties
       const taskData = { 
         text, 
-        completed: false,
-        createdAt: new Date().toISOString()
+        completed: false
       };
       
-      // Only add properties if they have values
-      if (dueDate) {
-        taskData.dueDate = dueDate;
-      }
+      // Always include these properties in the request, even if null/empty
+      taskData.dueDate = dueDate;
+      taskData.priority = priority;
+      taskData.category = category;
       
-      if (priority > 0) {
-        taskData.priority = priority;
-      }
-      
-      if (category && category.trim() !== '') {
-        taskData.category = category;
-      }
+      console.log("Sending task data:", taskData); // Debug log
       
       const response = await axios.post(API_URL, taskData);
       setTasks([response.data, ...tasks]);
       setError(null);
+      return true; // Return success status
     } catch (error) {
       console.error('Error adding task:', error);
       setError('Failed to add task. Please try again.');
+      return false; // Return failure status
     } finally {
       setLoading(false);
     }

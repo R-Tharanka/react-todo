@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeContext } from './context/ThemeContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -34,6 +36,18 @@ function App() {
                     />
                 </Routes>
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={theme === 'dark' ? 'dark' : 'light'}
+            />
         </div>
     );
 }
