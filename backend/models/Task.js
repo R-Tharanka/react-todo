@@ -18,6 +18,17 @@ const TaskSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  // New fields for filtering and sorting
+  dueDate: {
+    type: Date,
+    required: false
+  },
+  priority: {
+    type: Number,
+    default: 0,  // 0: No priority, 1: Low, 2: Medium, 3: High
+    min: 0,
+    max: 3
   }
 });
 

@@ -6,10 +6,59 @@ const { protect } = require('../middleware/authMiddleware');
 // Apply auth middleware to all routes
 router.use(protect);
 
-// GET all tasks for logged in user
+// GET all tasks for logged in user with filtering and sorting
 router.get('/', async (req, res) => {
   try {
-    const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const { filter, sort } = req.query;
+    let query = { user: req.user._id };
+    let sortOptions = { createdAt: -1 }; // Default sort by newest
+    
+    // Apply filters
+    if (filter) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      switch (filter) {
+        case 'completed':
+          query.completed = true;
+          break;
+        case 'today':
+          query.dueDate = { 
+            $gte: today, 
+            $lt: tomorrow 
+          };
+          break;
+        case 'upcoming':
+          query.dueDate = { $gte: tomorrow };
+          query.completed = false;
+          break;
+        case 'overdue':
+          query.dueDate = { $lt: today };
+          query.completed = false;
+          break;
+        // 'all' and default: no additional filter
+      }
+    }
+    
+    // Apply sorting
+    if (sort) {
+      switch (sort) {
+        case 'oldest':
+          sortOptions = { createdAt: 1 };
+          break;
+        case 'priority':
+          sortOptions = { priority: -1, createdAt: -1 };
+          break;
+        case 'az':
+          sortOptions = { text: 1 };
+          break;
+        // 'newest' and default: already set to { createdAt: -1 }
+      }
+    }
+    
+    const tasks = await Task.find(query).sort(sortOptions);
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -43,7 +92,9 @@ router.post('/', async (req, res) => {
     const newTask = new Task({
       text: req.body.text,
       completed: req.body.completed || false,
-      user: req.user._id
+      user: req.user._id,
+      dueDate: req.body.dueDate || null,
+      priority: req.body.priority !== undefined ? req.body.priority : 0
     });
     
     const savedTask = await newTask.save();
@@ -60,13 +111,29 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ message: 'Task text cannot be empty' });
     }
     
+    // Prepare update object with only the fields that are provided
+    const updateObj = {};
+    
+    if (req.body.text !== undefined) {
+      updateObj.text = req.body.text;
+    }
+    
+    if (req.body.completed !== undefined) {
+      updateObj.completed = req.body.completed;
+    }
+    
+    if (req.body.dueDate !== undefined) {
+      updateObj.dueDate = req.body.dueDate;
+    }
+    
+    if (req.body.priority !== undefined) {
+      updateObj.priority = req.body.priority;
+    }
+    
     // Find task by id and user id to ensure users can only update their own tasks
     const updatedTask = await Task.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
-      { 
-        text: req.body.text,
-        completed: req.body.completed !== undefined ? req.body.completed : undefined
-      },
+      updateObj,
       { new: true, runValidators: true }
     );
     

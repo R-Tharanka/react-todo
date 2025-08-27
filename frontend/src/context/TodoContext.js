@@ -16,26 +16,28 @@ export const TodoProvider = ({ children }) => {
   const [dueDate, setDueDate] = useState(null);
   const { user } = useContext(AuthContext);
   
-  // Load tasks when user is authenticated
+  // Load tasks when user is authenticated or when filter/sortBy changes
   useEffect(() => {
     if (user) {
-      // Load tasks from localStorage on initial render
-      const storedTasks = localStorage.getItem(`tasks-${user._id}`);
-      if (storedTasks) {
-        try {
-          setTasks(JSON.parse(storedTasks));
-        } catch (error) {
-          console.error('Error parsing tasks from localStorage:', error);
+      // Load tasks from localStorage on initial render (only when user changes)
+      if (!tasks.length) {
+        const storedTasks = localStorage.getItem(`tasks-${user._id}`);
+        if (storedTasks) {
+          try {
+            setTasks(JSON.parse(storedTasks));
+          } catch (error) {
+            console.error('Error parsing tasks from localStorage:', error);
+          }
         }
       }
       
-      // Then fetch from API
+      // Fetch from API
       fetchTasks();
     } else {
       // Clear tasks when logged out
       setTasks([]);
     }
-  }, [user]);
+  }, [user, filter, sortBy]);
   
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
@@ -44,13 +46,36 @@ export const TodoProvider = ({ children }) => {
     }
   }, [tasks, user]);
   
+  // Refetch tasks when filter or sort options change
+  useEffect(() => {
+    if (user) {
+      fetchTasks();
+    }
+  }, [filter, sortBy]);
+  
   // Fetch all tasks from the API
   const fetchTasks = async () => {
     if (!user) return;
     
     setLoading(true);
     try {
-      const response = await axios.get(API_URL);
+      // Include filter and sort parameters if they are set
+      let url = API_URL;
+      const params = new URLSearchParams();
+      
+      if (filter && filter !== 'all') {
+        params.append('filter', filter);
+      }
+      
+      if (sortBy) {
+        params.append('sort', sortBy);
+      }
+      
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
+      
+      const response = await axios.get(url);
       setTasks(response.data);
       setError(null);
     } catch (error) {
@@ -168,85 +193,16 @@ export const TodoProvider = ({ children }) => {
     setTasks(result);
   };
   
-  // Get filtered tasks based on filter, search term, and sort option
+  // Get filtered tasks (mostly used for search functionality)
   const getFilteredTasks = () => {
+    // The server already handles filter and sort, we just need to handle searchTerm here
     let filteredTasks = [...tasks];
     
-    // Apply filter
-    switch (filter) {
-      case 'completed':
-        filteredTasks = filteredTasks.filter(task => task.completed);
-        break;
-      case 'today':
-        // Filter tasks due today
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        filteredTasks = filteredTasks.filter(task => {
-          if (!task.dueDate) return false;
-          const taskDate = new Date(task.dueDate);
-          return taskDate >= today && taskDate < tomorrow;
-        });
-        break;
-      case 'upcoming':
-        // Filter tasks due in the future (after today)
-        const futureDate = new Date();
-        futureDate.setHours(0, 0, 0, 0);
-        futureDate.setDate(futureDate.getDate() + 1);
-        
-        filteredTasks = filteredTasks.filter(task => {
-          if (!task.dueDate) return false;
-          const taskDate = new Date(task.dueDate);
-          return taskDate >= futureDate && !task.completed;
-        });
-        break;
-      case 'overdue':
-        // Filter overdue tasks (past due date and not completed)
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        
-        filteredTasks = filteredTasks.filter(task => {
-          if (!task.dueDate || task.completed) return false;
-          const taskDate = new Date(task.dueDate);
-          taskDate.setHours(0, 0, 0, 0);
-          return taskDate < currentDate;
-        });
-        break;
-      case 'all':
-        // No additional filtering for 'all'
-        break;
-      default:
-        // Default is to show all tasks
-        break;
-    }
-    
-    // Apply search
+    // Apply search filtering if needed
     if (searchTerm.trim() !== '') {
       filteredTasks = filteredTasks.filter(task => 
         task.text.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-    
-    // Apply sorting
-    switch (sortBy) {
-      case 'newest':
-        filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        break;
-      case 'oldest':
-        filteredTasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        break;
-      case 'priority':
-        // Sort by priority (high to low)
-        filteredTasks.sort((a, b) => (b.priority || 0) - (a.priority || 0));
-        break;
-      case 'az':
-        filteredTasks.sort((a, b) => a.text.localeCompare(b.text));
-        break;
-      default:
-        // Default to newest first
-        filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
     
     return filteredTasks;
