@@ -69,7 +69,7 @@ const TodoList = () => {
       <Droppable droppableId="tasks-list">
         {(provided) => (
           <ul 
-            className="mt-6 space-y-3 w-full"
+            className="mt-6 space-y-3 w-full px-1"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >

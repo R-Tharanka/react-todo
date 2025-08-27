@@ -56,14 +56,14 @@ const HomePage = () => {
           </div>
         </div>
         
-        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
           {loading ? (
             <div className="flex justify-center items-center my-16">
               <FaSpinner className="animate-spin h-8 w-8 text-primary-purple" />
             </div>
           ) : (
             <div 
-              className="h-[33rem] sm:h-[34rem] md:h-[36rem] overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar task-container"
+              className="h-[33rem] sm:h-[34rem] md:h-[36rem] overflow-y-auto overflow-x-hidden px-2 custom-scrollbar task-container"
               id="task-scroll-container"
             >
               <TodoList />
