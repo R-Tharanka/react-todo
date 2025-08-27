@@ -1,19 +1,40 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
-import { FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
+import { FaCheckCircle, FaHourglassHalf, FaCalendar, FaFlag } from 'react-icons/fa';
 
 const Hero = () => {
   const { tasks, addTask } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
   const [newTaskText, setNewTaskText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [dueDate, setDueDate] = useState('');
+  const [priority, setPriority] = useState('medium');
+  const taskInputRef = useRef(null);
   
   // Calculate task statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = totalTasks - completedTasks;
+  
+  // Handle click outside of the task input section
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (taskInputRef.current && !taskInputRef.current.contains(event.target)) {
+        // Only close if there's no text
+        if (newTaskText.trim() === '') {
+          setIsInputFocused(false);
+        }
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [taskInputRef, newTaskText]);
   
   // Handle quick task creation
   const handleAddTask = () => {
@@ -22,16 +43,22 @@ const Hero = () => {
         text: newTaskText,
         completed: false,
         category: selectedCategory || 'Personal',
+        priority: priority,
+        dueDate: dueDate || null,
         date: new Date().toISOString()
       };
       addTask(newTask);
       setNewTaskText('');
       setSelectedCategory('');
+      setDueDate('');
+      setPriority('medium');
+      setIsInputFocused(false);
     }
   };
   
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleAddTask();
     }
   };
@@ -138,22 +165,71 @@ const Hero = () => {
       
       {/* Quick Task Input Section */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 mt-10">
-        <div className="bg-white/40 dark:bg-card-bg backdrop-blur-md rounded-lg p-4 shadow-lg">
-          <div className="flex flex-col md:flex-row gap-4">
-            <input 
-              type="text" 
-              placeholder="What is the task today?" 
-              className="flex-grow bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
-              value={newTaskText}
-              onChange={(e) => setNewTaskText(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <button 
-              className="bg-primary-purple hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
-              onClick={handleAddTask}
-            >
-              <span className="text-xl">+</span> Add Task
-            </button>
+        <div className="bg-white/40 dark:bg-card-bg backdrop-blur-md rounded-lg p-4 shadow-lg" ref={taskInputRef}>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <input 
+                type="text" 
+                placeholder="What is the task today?" 
+                className="flex-grow bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+                value={newTaskText}
+                onChange={(e) => setNewTaskText(e.target.value)}
+                onKeyPress={handleKeyPress}
+                onFocus={() => setIsInputFocused(true)}
+              />
+              <button 
+                className="bg-primary-purple hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
+                onClick={handleAddTask}
+              >
+                <span className="text-xl">+</span> Add Task
+              </button>
+            </div>
+            
+            {/* Additional options that appear when input is focused or has text */}
+            {(isInputFocused || newTaskText.trim().length > 0) && (
+              <div className="flex flex-wrap items-center gap-4 py-2 animate-fadeIn">
+                {/* Due Date Selector */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                    <FaCalendar className="mr-1 text-primary-purple" /> Due Date:
+                  </label>
+                  <input 
+                    type="date" 
+                    className="bg-white/70 dark:bg-dark-bg/70 rounded-md py-1.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                
+                {/* Priority Selector */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                    <FaFlag className="mr-1 text-primary-purple" /> Priority:
+                  </label>
+                  <div className="flex gap-1">
+                    <button 
+                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'low' ? 'bg-green-500 text-white' : 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'}`}
+                      onClick={() => setPriority('low')}
+                    >
+                      Low
+                    </button>
+                    <button 
+                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'medium' ? 'bg-yellow-500 text-white' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'}`}
+                      onClick={() => setPriority('medium')}
+                    >
+                      Medium
+                    </button>
+                    <button 
+                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'high' ? 'bg-red-500 text-white' : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300'}`}
+                      onClick={() => setPriority('high')}
+                    >
+                      High
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex flex-wrap gap-3 mt-4">
             <button 
