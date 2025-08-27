@@ -5,16 +5,39 @@ import { AuthContext } from '../context/AuthContext';
 import { FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
 
 const Hero = () => {
-  const { tasks } = useContext(TodoContext);
+  const { tasks, addTask } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
+  const [newTaskText, setNewTaskText] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   
   // Calculate task statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = totalTasks - completedTasks;
+  
+  // Handle quick task creation
+  const handleAddTask = () => {
+    if (newTaskText.trim()) {
+      const newTask = {
+        text: newTaskText,
+        completed: false,
+        category: selectedCategory || 'Personal',
+        date: new Date().toISOString()
+      };
+      addTask(newTask);
+      setNewTaskText('');
+      setSelectedCategory('');
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleAddTask();
+    }
+  };
 
   return (
-    <div className="relative overflow-hidden mb-10 py-20">
+    <div className="relative overflow-hidden mb-10 pb-20 pt-10">
       {/* Animated background orbs */}
       <div className="absolute inset-0 z-0">
         <motion.div 
@@ -58,10 +81,11 @@ const Hero = () => {
         />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
+      <div className="relative z-10 max-w-4xl mx-auto text-center px-4 pb-8">
         {/* Animated heading */}
         <motion.h1 
           className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-purple to-secondary-purple mb-6"
+          style={{ lineHeight: 'normal' }}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
@@ -110,6 +134,54 @@ const Hero = () => {
             </div>
           </motion.div>
         )}
+      </div>
+      
+      {/* Quick Task Input Section */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 mt-10">
+        <div className="bg-white/40 dark:bg-card-bg/40 backdrop-blur-md rounded-lg p-4 shadow-lg">
+          <div className="flex flex-col md:flex-row gap-4">
+            <input 
+              type="text" 
+              placeholder="What is the task today?" 
+              className="flex-grow bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+              value={newTaskText}
+              onChange={(e) => setNewTaskText(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            <button 
+              className="bg-gradient-to-r from-primary-purple to-secondary-purple hover:opacity-90 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
+              onClick={handleAddTask}
+            >
+              <span className="text-xl">+</span> Add Task
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-3 mt-4">
+            <button 
+              className={`bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Work' ? 'ring-2 ring-indigo-500' : ''}`}
+              onClick={() => setSelectedCategory('Work')}
+            >
+              <span className="w-5 h-5 flex items-center justify-center">🧰</span> Work
+            </button>
+            <button 
+              className={`bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Personal' ? 'ring-2 ring-blue-500' : ''}`}
+              onClick={() => setSelectedCategory('Personal')}
+            >
+              <span className="w-5 h-5 flex items-center justify-center">🏠</span> Personal
+            </button>
+            <button 
+              className={`bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Health' ? 'ring-2 ring-green-500' : ''}`}
+              onClick={() => setSelectedCategory('Health')}
+            >
+              <span className="w-5 h-5 flex items-center justify-center">💪</span> Health
+            </button>
+            <button 
+              className={`bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Shopping' ? 'ring-2 ring-yellow-500' : ''}`}
+              onClick={() => setSelectedCategory('Shopping')}
+            >
+              <span className="w-5 h-5 flex items-center justify-center">🛒</span> Shopping
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
