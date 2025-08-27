@@ -177,7 +177,7 @@ const Hero = () => {
               <input 
                 type="text" 
                 placeholder="What is the task today?" 
-                className="flex-grow bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+                className="flex-grow bg-white/70 dark:bg-gray-800 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white border border-transparent dark:border-gray-600"
                 value={newTaskText}
                 onChange={(e) => setNewTaskText(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -205,12 +205,12 @@ const Hero = () => {
               <div className="flex flex-col md:flex-row items-center gap-4 py-2 animate-fadeIn">
                 {/* Due Date Selector */}
                 <div className="flex items-center w-full md:w-1/2 relative">
-                  <div className="absolute left-3 text-gray-500 dark:text-gray-400">
-                    <FaCalendar className="text-primary-purple" />
+                  <div className="absolute left-3 text-gray-500 dark:text-white">
+                    <FaCalendar className="text-primary-purple dark:text-white" />
                   </div>
                   <input 
                     type="date" 
-                    className="w-full bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+                    className="w-full bg-white/70 dark:bg-gray-800 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary-purple border border-transparent dark:border-gray-600 dark:text-white"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
@@ -220,20 +220,20 @@ const Hero = () => {
                 
                 {/* Priority Selector */}
                 <div className="flex items-center w-full md:w-1/2 relative">
-                  <div className="absolute left-3 text-gray-500 dark:text-gray-400">
-                    <FaFlag className="text-primary-purple" />
+                  <div className="absolute left-3 text-gray-500 dark:text-white">
+                    <FaFlag className="text-primary-purple dark:text-white" />
                   </div>
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
-                    className="w-full appearance-none bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white cursor-pointer"
+                    className="w-full appearance-none bg-white/70 dark:bg-gray-800 rounded-lg py-3 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-purple border border-transparent dark:border-gray-600 dark:text-white cursor-pointer"
                   >
-                    <option value="low" className="dark:bg-dark-bg">Low Priority</option>
-                    <option value="medium" className="dark:bg-dark-bg">Medium Priority</option>
-                    <option value="high" className="dark:bg-dark-bg">High Priority</option>
+                    <option value="low" className="dark:bg-gray-700">Low Priority</option>
+                    <option value="medium" className="dark:bg-gray-700">Medium Priority</option>
+                    <option value="high" className="dark:bg-gray-700">High Priority</option>
                   </select>
                   <div className="absolute right-3 top-3 pointer-events-none">
-                    <svg className="h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="h-5 w-5 text-gray-500 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </div>
