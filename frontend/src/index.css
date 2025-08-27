@@ -4,7 +4,8 @@
 
 @layer base {
   body {
-    @apply font-['Poppins',_sans-serif] bg-fixed min-h-screen;
+    @apply font-sans bg-fixed min-h-screen;
+    font-family: 'Poppins', sans-serif;
   }
 
   /* Light mode gradient with specified colors */
@@ -16,108 +17,163 @@
   .dark body {
     background: linear-gradient(135deg, rgba(152, 50, 245, 0.8), rgba(93, 86, 168, 1));
   }
-  
+
   /* Custom animation */
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
   }
-  
+
   @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
+  @keyframes profilePulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(152, 50, 245, 0.6);
+    }
+
+    70% {
+      box-shadow: 0 0 0 10px rgba(152, 50, 245, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(152, 50, 245, 0);
+    }
+  }
+
+  @keyframes avatarSuccess {
+    0% {
+      transform: scale(1);
+      border-color: #9832f5;
+    }
+
+    50% {
+      transform: scale(1.05);
+      border-color: #10b981;
+    }
+
+    100% {
+      transform: scale(1);
+      border-color: #9832f5;
+    }
+  }
+
+  .avatar-success {
+    animation: avatarSuccess 1s ease;
+  }
 }
 
 @layer components {
+
   /* Custom utility classes for animations */
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-in-out;
   }
-  
+
   .animate-spin-custom {
     animation: spin 1s linear infinite;
   }
-  
+
   /* Task item animation */
   .task-appear {
     animation: fadeIn 0.3s ease-in-out;
   }
-  
+
   /* Custom scrollbar styling */
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
-    height: 0; /* Remove horizontal scrollbar */
+    height: 0;
+    /* Remove horizontal scrollbar */
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: rgba(229, 231, 235, 0.5);
     border-radius: 10px;
   }
-  
+
   .dark .custom-scrollbar::-webkit-scrollbar-track {
     background: rgba(75, 85, 99, 0.3);
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(152, 50, 245, 0.8);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(152, 50, 245, 1);
     background-clip: padding-box;
   }
-  
+
   /* For Firefox */
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: rgba(152, 50, 245, 0.8) rgba(229, 231, 235, 0.5);
-    overflow-x: hidden; /* Ensure no horizontal scroll */
+    overflow-x: hidden;
+    /* Ensure no horizontal scroll */
   }
-  
+
   /* Scrolling indicator animation */
   @keyframes scrollIndicator {
-    0% { transform: translateY(0); opacity: 0.8; }
-    50% { transform: translateY(5px); opacity: 1; }
-    100% { transform: translateY(0); opacity: 0.8; }
+    0% {
+      transform: translateY(0);
+      opacity: 0.8;
+    }
+
+    50% {
+      transform: translateY(5px);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 0.8;
+    }
   }
-  
+
   .scroll-hint {
     animation: scrollIndicator 2s ease-in-out infinite;
   }
-  
+
   /* Theme transition */
   .theme-transition {
     transition: all 0.3s ease;
   }
-  
+
   /* Custom gradient buttons */
   .btn-gradient {
     background: linear-gradient(to right, #9832f5, #5d56a8);
     color: white;
     transition: all 0.2s ease;
   }
-  
+
   .btn-gradient:hover {
     opacity: 0.9;
   }
-  
+
   /* Add task button with specific color */
   .btn-add-task {
     background-color: #8732d8;
     color: white;
     transition: all 0.2s ease;
   }
-  
+
   .btn-add-task:hover {
     opacity: 0.9;
   }

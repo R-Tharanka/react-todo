@@ -7,6 +7,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+      },
       colors: {
         'primary-purple': '#9832f5',
         'primary-hover': '#8732d8',
@@ -28,6 +31,11 @@ module.exports = {
       },
       minHeight: {
         'screen-minus-nav': 'calc(100vh - 60px)',
+      },
+      animation: {
+        'fadeIn': 'fadeIn 0.5s ease-out',
+        'spin-slow': 'spin 3s linear infinite',
+        'bounce-slow': 'bounce 2s ease-in-out infinite',
       }
     },
   },

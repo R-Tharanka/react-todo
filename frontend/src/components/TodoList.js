@@ -5,10 +5,19 @@ import TodoItem from './TodoItem';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaEye, FaTasks } from 'react-icons/fa';
 
-const TodoList = () => {
+const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = () => {} }) => {
   const { getFilteredTasks, reorderTasks } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
   const filteredTasks = getFilteredTasks();
+  
+  // Toggle task selection
+  const toggleTaskSelection = (taskId) => {
+    if (selectedTasks.includes(taskId)) {
+      setSelectedTasks(selectedTasks.filter(id => id !== taskId));
+    } else {
+      setSelectedTasks([...selectedTasks, taskId]);
+    }
+  };
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
@@ -84,9 +93,34 @@ const TodoList = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""}
+                    className={`${snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""} ${selectMode ? "relative" : ""}`}
                   >
-                    <TodoItem task={task} />
+                    {selectMode && (
+                      <div 
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleTaskSelection(task._id);
+                        }}
+                      >
+                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer
+                          ${selectedTasks.includes(task._id) 
+                            ? 'bg-primary-purple border-primary-purple' 
+                            : 'border-gray-400 dark:border-gray-500 bg-white dark:bg-gray-700'}`}
+                        >
+                          {selectedTasks.includes(task._id) && (
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <TodoItem 
+                      task={task} 
+                      selectMode={selectMode}
+                      isSelected={selectedTasks.includes(task._id)}
+                    />
                   </div>
                 )}
               </Draggable>

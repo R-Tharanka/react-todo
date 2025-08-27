@@ -195,6 +195,44 @@ export const TodoProvider = ({ children }) => {
     setTasks(result);
   };
   
+  // Delete multiple tasks at once
+  const deleteMultipleTasks = async (taskIds) => {
+    if (!taskIds.length) return;
+    
+    setLoading(true);
+    try {
+      // Create an array of promises for each delete operation
+      const deletePromises = taskIds.map(id => 
+        axios.delete(`${API_URL}/${id}`)
+      );
+      
+      // Wait for all delete operations to complete
+      await Promise.all(deletePromises);
+      
+      // Remove the deleted tasks from state
+      setTasks(tasks.filter(task => !taskIds.includes(task._id)));
+      setError(null);
+    } catch (error) {
+      console.error('Error deleting multiple tasks:', error);
+      setError('Failed to delete selected tasks. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Delete all completed tasks
+  const deleteCompletedTasks = async () => {
+    const completedTaskIds = tasks
+      .filter(task => task.completed)
+      .map(task => task._id);
+      
+    if (completedTaskIds.length === 0) {
+      return; // No completed tasks to delete
+    }
+    
+    deleteMultipleTasks(completedTaskIds);
+  };
+  
   // Get filtered tasks (mostly used for search functionality)
   const getFilteredTasks = () => {
     // The server already handles filter and sort, we just need to handle searchTerm here
@@ -230,7 +268,9 @@ export const TodoProvider = ({ children }) => {
         toggleComplete,
         deleteTask,
         reorderTasks,
-        fetchTasks
+        fetchTasks,
+        deleteMultipleTasks,
+        deleteCompletedTasks
       }}
     >
       {children}

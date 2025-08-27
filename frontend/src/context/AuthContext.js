@@ -8,6 +8,40 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Initialize dark mode based on user preference or system preference
+  useEffect(() => {
+    const initializeDarkMode = () => {
+      const darkModePref = localStorage.getItem('darkMode');
+      const userInfo = localStorage.getItem('userInfo');
+      let darkMode = 'system';
+      
+      if (userInfo) {
+        try {
+          const parsedUser = JSON.parse(userInfo);
+          darkMode = parsedUser.preferences?.darkMode || darkModePref || 'system';
+        } catch (e) {
+          console.error('Error parsing user info:', e);
+          darkMode = darkModePref || 'system';
+        }
+      }
+      
+      // Apply dark mode based on preference
+      if (darkMode === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else if (darkMode === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else if (darkMode === 'system') {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    };
+    
+    initializeDarkMode();
+  }, []);
+
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -107,10 +141,42 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      // Apply dark mode preference if it exists
+      if (userData.preferences?.darkMode) {
+        const prefersDark = userData.preferences.darkMode === 'dark' || 
+          (userData.preferences.darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        
+        localStorage.setItem('darkMode', userData.preferences.darkMode);
+      }
+      
       const { data } = await axios.put('/api/users/profile', userData);
       
-      setUser(data);
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      // Update user state with new data
+      setUser(prev => ({
+        ...prev,
+        ...data,
+        preferences: {
+          ...(prev?.preferences || {}),
+          ...(userData.preferences || {}),
+        }
+      }));
+      
+      // Save updated user to localStorage
+      const updatedUser = {
+        ...user,
+        ...data,
+        preferences: {
+          ...(user?.preferences || {}),
+          ...(userData.preferences || {}),
+        }
+      };
+      localStorage.setItem('userInfo', JSON.stringify(updatedUser));
       
       return data;
     } catch (error) {

@@ -69,7 +69,7 @@ const getPriorityColor = (priority) => {
   }
 };
 
-const TodoItem = ({ task }) => {
+const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   // State for tracking editing mode and task properties
   const [isEditing, setIsEditing] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -133,7 +133,11 @@ const TodoItem = ({ task }) => {
   };
 
   return (
-    <li className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative">
+    <li className={`bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative ${
+      selectMode ? 'pl-9' : ''
+    } ${
+      isSelected ? 'ring-2 ring-primary-purple bg-primary-purple/5 dark:bg-primary-purple/10' : ''
+    }`}>
       {/* Task completion checkbox */}
       <div 
         className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
