@@ -12,6 +12,7 @@ export const TodoProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
   const { user } = useContext(AuthContext);
   
   // Load tasks when user is authenticated
@@ -140,7 +141,7 @@ export const TodoProvider = ({ children }) => {
     setTasks(result);
   };
   
-  // Get filtered tasks based on filter and search term
+  // Get filtered tasks based on filter, search term, and sort option
   const getFilteredTasks = () => {
     let filteredTasks = [...tasks];
     
@@ -158,6 +159,26 @@ export const TodoProvider = ({ children }) => {
       );
     }
     
+    // Apply sorting
+    switch (sortBy) {
+      case 'newest':
+        filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case 'oldest':
+        filteredTasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
+      case 'priority':
+        // Assuming priority is a field in task object, if not, you'll need to add it
+        filteredTasks.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+        break;
+      case 'az':
+        filteredTasks.sort((a, b) => a.text.localeCompare(b.text));
+        break;
+      default:
+        // Default to newest first
+        filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    
     return filteredTasks;
   };
   
@@ -169,8 +190,10 @@ export const TodoProvider = ({ children }) => {
         error,
         filter,
         searchTerm,
+        sortBy,
         setFilter,
         setSearchTerm,
+        setSortBy,
         getFilteredTasks,
         addTask,
         updateTask,
