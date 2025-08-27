@@ -96,6 +96,14 @@ const TodoItem = ({ task }) => {
     setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
     setEditCategory(task.category || '');
   };
+  
+  // Open details modal for metadata editing
+  const openDetailsModal = () => {
+    setShowDetailsModal(true);
+    setEditDueDate(task.dueDate || null);
+    setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
+    setEditCategory(task.category || '');
+  };
 
   // Save task changes (text and metadata)
   const handleSave = () => {
@@ -115,7 +123,7 @@ const TodoItem = ({ task }) => {
   };
 
   return (
-    <li className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4 flex items-center transition-all hover:shadow-md group relative">
+    <li className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4 flex items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative">
       {/* Task completion checkbox */}
       <div 
         className={`h-6 w-6 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors ${
@@ -188,32 +196,38 @@ const TodoItem = ({ task }) => {
         </div>
       ) : (
         <div className="flex-grow">
-          <p className={`text-gray-800 dark:text-white ${
-            task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
-          }`}>
+          <p 
+            className={`text-gray-800 dark:text-white ${
+              task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
+            } cursor-pointer hover:text-primary-purple dark:hover:text-primary-purple transition-colors`}
+            onClick={handleEdit}
+            tabIndex={0}
+            role="button"
+            aria-label="Edit task"
+          >
             {task.text}
           </p>
           {/* Task metadata badges (due date, priority, category) */}
           <div className="mt-1 text-xs flex items-center flex-wrap gap-2">
             {/* Due date badge with conditional styling based on status */}
             {task.dueDate && (
-              <span className={`px-2 py-1 rounded-full ${
-                isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 
-                isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' : 
-                'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+              <span className={`px-2 py-1 rounded-full transform transition-all duration-200 hover:scale-105 hover:shadow-sm ${
+                isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800' : 
+                isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800' : 
+                'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
               }`}>
-                {formatDueDate(task.dueDate)}
+                <FaCalendarAlt className="inline mr-1" /> {formatDueDate(task.dueDate)}
               </span>
             )}
             {/* Priority badge */}
             {task.priority > 0 && (
-              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
-                {getPriorityLabel(task.priority)}
+              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 transform transition-all duration-200 hover:scale-105 hover:bg-purple-200 dark:hover:bg-purple-800 hover:shadow-sm">
+                <FaFlag className="inline mr-1" /> {getPriorityLabel(task.priority)}
               </span>
             )}
             {/* Category badge */}
             {task.category && (
-              <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 flex items-center">
+              <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 flex items-center transform transition-all duration-200 hover:scale-105 hover:bg-indigo-200 dark:hover:bg-indigo-800 hover:shadow-sm">
                 <FaTag className="mr-1" size={10} /> {task.category}
               </span>
             )}
@@ -329,7 +343,7 @@ const TodoItem = ({ task }) => {
                 Cancel
               </button>
               <button
-                onClick={saveDetails}
+                onClick={handleSave}
                 className="px-4 py-2 bg-primary-purple text-white rounded-md hover:bg-purple-700"
               >
                 Save
