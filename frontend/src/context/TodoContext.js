@@ -87,7 +87,7 @@ export const TodoProvider = ({ children }) => {
   };
   
   // Add a new task
-  const addTask = async (text, dueDate = null, priority = 0) => {
+  const addTask = async (text, dueDate = null, priority = 0, category = '') => {
     if (!text || text.trim() === '') {
       setError('Task text cannot be empty!');
       return;
@@ -101,12 +101,17 @@ export const TodoProvider = ({ children }) => {
         createdAt: new Date().toISOString()
       };
       
+      // Only add properties if they have values
       if (dueDate) {
         taskData.dueDate = dueDate;
       }
       
       if (priority > 0) {
         taskData.priority = priority;
+      }
+      
+      if (category && category.trim() !== '') {
+        taskData.category = category;
       }
       
       const response = await axios.post(API_URL, taskData);
@@ -121,7 +126,7 @@ export const TodoProvider = ({ children }) => {
   };
   
   // Update an existing task
-  const updateTask = async (id, updatedText, dueDate = null, priority = null) => {
+  const updateTask = async (id, updatedText, dueDate = null, priority = null, category = null) => {
     if (!updatedText || updatedText.trim() === '') {
       setError('Task text cannot be empty!');
       return;
@@ -138,7 +143,8 @@ export const TodoProvider = ({ children }) => {
       const updateData = {
         text: updatedText,
         dueDate: dueDate !== null ? dueDate : existingTask.dueDate,
-        priority: priority !== null ? priority : existingTask.priority
+        priority: priority !== null ? priority : existingTask.priority,
+        category: category !== null ? category : existingTask.category
       };
       
       const response = await axios.put(`${API_URL}/${id}`, updateData);

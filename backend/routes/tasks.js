@@ -94,7 +94,8 @@ router.post('/', async (req, res) => {
       completed: req.body.completed || false,
       user: req.user._id,
       dueDate: req.body.dueDate || null,
-      priority: req.body.priority !== undefined ? req.body.priority : 0
+      priority: req.body.priority !== undefined ? req.body.priority : 0,
+      category: req.body.category || null
     });
     
     const savedTask = await newTask.save();
@@ -128,6 +129,10 @@ router.put('/:id', async (req, res) => {
     
     if (req.body.priority !== undefined) {
       updateObj.priority = req.body.priority;
+    }
+    
+    if (req.body.category !== undefined) {
+      updateObj.category = req.body.category;
     }
     
     // Find task by id and user id to ensure users can only update their own tasks

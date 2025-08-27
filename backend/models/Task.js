@@ -29,6 +29,12 @@ const TaskSchema = new mongoose.Schema({
     default: 0,  // 0: No priority, 1: Low, 2: Medium, 3: High
     min: 0,
     max: 3
+  },
+  // Category field for task categorization
+  category: {
+    type: String,
+    required: false,
+    trim: true
   }
 });
 

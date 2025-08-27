@@ -53,7 +53,10 @@ const Hero = () => {
       const priorityValue = getPriorityValue(priority);
       const dueDateValue = dueDate ? new Date(dueDate).toISOString() : null;
       
-      addTask(newTaskText, dueDateValue, priorityValue);
+      // Make sure to pass all properties: text, dueDate, priority, and category
+      addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
+      
+      // Reset form fields
       setNewTaskText('');
       setSelectedCategory('');
       setDueDate('');

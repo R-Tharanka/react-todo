@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { TodoContext } from '../context/TodoContext';
-import { FaEdit, FaTrash, FaCheck, FaTimes, FaSave, FaCalendarAlt, FaFlag } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaCheck, FaTimes, FaSave, FaCalendarAlt, FaFlag, FaTag } from 'react-icons/fa';
 import DatePicker from './DatePicker';
 import PrioritySelect from './PrioritySelect';
 
@@ -57,7 +57,8 @@ const TodoItem = ({ task }) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [editText, setEditText] = useState(task.text);
   const [editDueDate, setEditDueDate] = useState(task.dueDate || null);
-  const [editPriority, setEditPriority] = useState(task.priority || 0);
+  const [editPriority, setEditPriority] = useState(typeof task.priority !== 'undefined' ? task.priority : 0);
+  const [editCategory, setEditCategory] = useState(task.category || '');
   const { toggleComplete, updateTask, deleteTask } = useContext(TodoContext);
   const modalRef = useRef(null);
 
@@ -78,12 +79,13 @@ const TodoItem = ({ task }) => {
     setIsEditing(true);
     setEditText(task.text);
     setEditDueDate(task.dueDate || null);
-    setEditPriority(task.priority || 0);
+    setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
+    setEditCategory(task.category || '');
   };
 
   const handleSave = () => {
     if (editText.trim() !== '') {
-      updateTask(task._id, editText, editDueDate, editPriority);
+      updateTask(task._id, editText, editDueDate, editPriority, editCategory);
       setIsEditing(false);
     }
   };
@@ -92,18 +94,20 @@ const TodoItem = ({ task }) => {
     setIsEditing(false);
     setEditText(task.text);
     setEditDueDate(task.dueDate || null);
-    setEditPriority(task.priority || 0);
+    setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
+    setEditCategory(task.category || '');
   };
   
   const openDetailsModal = (e) => {
     e.stopPropagation();
     setShowDetailsModal(true);
     setEditDueDate(task.dueDate || null);
-    setEditPriority(task.priority || 0);
+    setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
+    setEditCategory(task.category || '');
   };
   
   const saveDetails = () => {
-    updateTask(task._id, task.text, editDueDate, editPriority);
+    updateTask(task._id, task.text, editDueDate, editPriority, editCategory);
     setShowDetailsModal(false);
   };
 
@@ -141,8 +145,8 @@ const TodoItem = ({ task }) => {
           }`}>
             {task.text}
           </p>
-          {task.dueDate && (
-            <div className="mt-1 text-xs flex items-center">
+          <div className="mt-1 text-xs flex items-center flex-wrap gap-1">
+            {task.dueDate && (
               <span className={`px-2 py-1 rounded-full ${
                 isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' : 
                 isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' : 
@@ -150,13 +154,18 @@ const TodoItem = ({ task }) => {
               }`}>
                 {formatDueDate(task.dueDate)}
               </span>
-              {task.priority > 0 && (
-                <span className="ml-2 px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
-                  {getPriorityLabel(task.priority)}
-                </span>
-              )}
-            </div>
-          )}
+            )}
+            {task.priority > 0 && (
+              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                {getPriorityLabel(task.priority)}
+              </span>
+            )}
+            {task.category && (
+              <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 flex items-center">
+                <FaTag className="mr-1" size={10} /> {task.category}
+              </span>
+            )}
+          </div>
         </div>
       )}
 
@@ -231,6 +240,33 @@ const TodoItem = ({ task }) => {
                   selectedPriority={editPriority}
                   onPriorityChange={setEditPriority}
                 />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Category
+                </label>
+                <div className="relative">
+                  <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none">
+                    <FaTag className="text-primary-purple dark:text-white" />
+                  </div>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full appearance-none bg-white/70 dark:bg-gray-800 rounded-lg py-3 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-purple border border-transparent dark:border-gray-600 dark:text-white cursor-pointer"
+                  >
+                    <option value="">No Category</option>
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Health">Health</option>
+                    <option value="Shopping">Shopping</option>
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
             
