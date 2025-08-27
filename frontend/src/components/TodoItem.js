@@ -251,40 +251,66 @@ const TodoItem = ({ task }) => {
         {isEditing ? (
           <>
             {/* Save button for editing mode */}
-            <button 
-              onClick={handleSave} 
-              aria-label="Save"
-              className="p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
-            >
-              <FaSave />
-            </button>
+            <div className="relative group/tooltip">
+              <button 
+                onClick={handleSave} 
+                aria-label="Save"
+                className="p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+              >
+                <FaSave />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+                Save changes
+              </div>
+            </div>
+            
             {/* Cancel button for editing mode */}
-            <button 
-              onClick={handleCancel} 
-              aria-label="Cancel"
-              className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-            >
-              <FaTimes />
-            </button>
+            <div className="relative group/tooltip">
+              <button 
+                onClick={handleCancel} 
+                aria-label="Cancel"
+                className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              >
+                <FaTimes />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+                Cancel editing
+              </div>
+            </div>
           </>
         ) : (
           <>
             {/* Edit button for all task properties */}
-            <button 
-              onClick={handleEdit} 
-              aria-label="Edit Task"
-              className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            >
-              <FaEdit />
-            </button>
+            <div className="relative group/tooltip">
+              <button 
+                onClick={handleEdit} 
+                aria-label="Edit Task"
+                className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaEdit />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+                Edit task
+              </div>
+            </div>
+            
             {/* Delete button */}
-            <button 
-              onClick={() => deleteTask(task._id)} 
-              aria-label="Delete"
-              className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-            >
-              <FaTrash />
-            </button>
+            <div className="relative group/tooltip">
+              <button 
+                onClick={() => deleteTask(task._id)} 
+                aria-label="Delete"
+                className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              >
+                <FaTrash />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+                Delete task
+              </div>
+            </div>
           </>
         )}
       </div>
