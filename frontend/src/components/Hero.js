@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 import { FaCheckCircle, FaHourglassHalf, FaCalendar, FaFlag } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 
 const Hero = () => {
   const { tasks, addTask, error } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
+  const { success, error: showError, warning } = useNotification();
   const [newTaskText, setNewTaskText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -58,10 +59,10 @@ const Hero = () => {
       
       try {
         // Make sure to pass all properties: text, dueDate, priority, and category
-        const success = await addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
+        const result = await addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
         
-        if (success) {
-          toast.success('Task added successfully!');
+        if (result) {
+          success('Task added successfully!');
           
           // Reset form fields
           setNewTaskText('');
@@ -70,15 +71,15 @@ const Hero = () => {
           setPriority('medium');
           setIsInputFocused(false);
         } else {
-          toast.error('Failed to add task. Please try again.');
+          showError('Failed to add task. Please try again.');
         }
       } catch (err) {
-        toast.error('An error occurred. Please try again.');
+        showError('An error occurred. Please try again.');
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      toast.warning('Task text cannot be empty!');
+      warning('Task text cannot be empty!');
     }
   };
   
