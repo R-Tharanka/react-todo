@@ -1,18 +1,39 @@
 import React, { useState, useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
-import { FaPlus } from 'react-icons/fa';
+import { AuthContext } from '../context/AuthContext';
+import { FaPlus, FaLock } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const TodoForm = () => {
   const [inputText, setInputText] = useState('');
   const { addTask, error } = useContext(TodoContext);
+  const { user } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputText.trim()) {
+    if (inputText.trim() && user) {
       addTask(inputText);
       setInputText('');
     }
   };
+
+  if (!user) {
+    return (
+      <div className="mt-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+        <FaLock className="mx-auto text-4xl mb-3 text-primary-purple opacity-70" />
+        <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">Login to Add Tasks</h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">You need to be logged in to add and manage your tasks.</p>
+        <div className="flex justify-center space-x-4">
+          <Link to="/login" className="px-6 py-2 bg-primary-purple hover:bg-primary-hover text-white rounded-lg transition-colors">
+            Login
+          </Link>
+          <Link to="/register" className="px-6 py-2 border border-primary-purple text-primary-purple dark:text-white hover:bg-primary-purple hover:text-white rounded-lg transition-colors">
+            Register
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form className="mt-6 flex" onSubmit={handleSubmit}>
@@ -27,7 +48,7 @@ const TodoForm = () => {
       <button 
         type="submit" 
         aria-label="Add task"
-        className="btn-add-task px-6 py-3 rounded-r-lg flex items-center justify-center"
+        className="btn-add-task px-6 py-3 rounded-r-lg flex items-center justify-center bg-primary-purple hover:bg-primary-hover text-white"
       >
         Add Task <FaPlus className="ml-2" />
       </button>

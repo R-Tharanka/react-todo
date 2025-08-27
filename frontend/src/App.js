@@ -21,14 +21,7 @@ function App() {
             <Navbar />
             <div className="flex-1 w-full max-w-7xl mx-auto px-4 pt-16 sm:px-6 md:pt-20 lg:px-8">
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <PrivateRoute>
-                                <HomePage />
-                            </PrivateRoute>
-                        }
-                    />
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route

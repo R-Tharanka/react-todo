@@ -97,6 +97,9 @@ export const AuthProvider = ({ children }) => {
     
     // Remove auth token from axios defaults
     delete axios.defaults.headers.common['Authorization'];
+    
+    // Redirect to home page
+    window.location.href = '/';
   };
 
   // Update user profile
