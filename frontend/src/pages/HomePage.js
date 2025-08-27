@@ -3,6 +3,7 @@ import TodoList from '../components/TodoList';
 import TodoForm from '../components/TodoForm';
 import SearchBox from '../components/SearchBox';
 import FilterButtons from '../components/FilterButtons';
+import Hero from '../components/Hero';
 import { TodoContext } from '../context/TodoContext';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -10,9 +11,9 @@ const HomePage = () => {
   const { loading, error } = useContext(TodoContext);
   
   return (
-    <div className="min-h-screen pt-20 pb-12 px-4">
-      <div className="max-w-2xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8">
-        <h1 className="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-purple to-secondary-purple mb-6" style={{ lineHeight: 'normal' }}>Get Things Done!</h1>
+    <div className="min-h-screen pt-16 pb-12">
+      <Hero />
+      <div className="max-w-2xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8 mx-4">
         <TodoForm />
         
         <div className="mt-8">
