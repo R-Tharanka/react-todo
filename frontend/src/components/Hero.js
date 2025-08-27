@@ -187,45 +187,40 @@ const Hero = () => {
             
             {/* Additional options that appear when input is focused or has text */}
             {(isInputFocused || newTaskText.trim().length > 0) && (
-              <div className="flex flex-wrap items-center gap-4 py-2 animate-fadeIn">
+              <div className="flex flex-col md:flex-row items-center gap-4 py-2 animate-fadeIn">
                 {/* Due Date Selector */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-                    <FaCalendar className="mr-1 text-primary-purple" /> Due Date:
-                  </label>
+                <div className="flex items-center w-full md:w-1/2 relative">
+                  <div className="absolute left-3 text-gray-500 dark:text-gray-400">
+                    <FaCalendar className="text-primary-purple" />
+                  </div>
                   <input 
                     type="date" 
-                    className="bg-white/70 dark:bg-dark-bg/70 rounded-md py-1.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
+                    className="w-full bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
+                    placeholder="Select due date"
                   />
                 </div>
                 
                 {/* Priority Selector */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-                    <FaFlag className="mr-1 text-primary-purple" /> Priority:
-                  </label>
-                  <div className="flex gap-1">
-                    <button 
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'low' ? 'bg-green-500 text-white' : 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'}`}
-                      onClick={() => setPriority('low')}
-                    >
-                      Low
-                    </button>
-                    <button 
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'medium' ? 'bg-yellow-500 text-white' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'}`}
-                      onClick={() => setPriority('medium')}
-                    >
-                      Medium
-                    </button>
-                    <button 
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium ${priority === 'high' ? 'bg-red-500 text-white' : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300'}`}
-                      onClick={() => setPriority('high')}
-                    >
-                      High
-                    </button>
+                <div className="flex items-center w-full md:w-1/2 relative">
+                  <div className="absolute left-3 text-gray-500 dark:text-gray-400">
+                    <FaFlag className="text-primary-purple" />
+                  </div>
+                  <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
+                    className="w-full appearance-none bg-white/70 dark:bg-dark-bg/70 rounded-lg py-3 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white cursor-pointer"
+                  >
+                    <option value="low" className="dark:bg-dark-bg">Low Priority</option>
+                    <option value="medium" className="dark:bg-dark-bg">Medium Priority</option>
+                    <option value="high" className="dark:bg-dark-bg">High Priority</option>
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
                   </div>
                 </div>
               </div>
