@@ -133,10 +133,10 @@ const TodoItem = ({ task }) => {
   };
 
   return (
-    <li className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4 flex items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative">
+    <li className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative">
       {/* Task completion checkbox */}
       <div 
-        className={`h-6 w-6 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors ${
+        className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
           task.completed 
             ? 'bg-green-500 border-2 border-green-500' 
             : 'border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 dark:hover:border-green-500'
@@ -209,7 +209,7 @@ const TodoItem = ({ task }) => {
           <p 
             className={`text-gray-800 dark:text-white ${
               task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
-            } cursor-pointer hover:text-primary-purple dark:hover:text-primary-purple transition-colors`}
+            } cursor-pointer hover:text-primary-purple dark:hover:text-primary-purple transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
             onClick={handleEdit}
             tabIndex={0}
             role="button"
@@ -218,36 +218,36 @@ const TodoItem = ({ task }) => {
             {task.text}
           </p>
           {/* Task metadata badges (due date, priority, category) */}
-          <div className="mt-1 text-xs flex items-center flex-wrap gap-2">
+          <div className="mt-1 text-xs flex items-center flex-wrap gap-1.5 sm:gap-2">
             {/* Due date badge with conditional styling based on status */}
             {task.dueDate && (
-              <span className={`px-2 py-1 rounded-full transform transition-all duration-200 hover:scale-105 hover:shadow-sm ${
+              <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full transform transition-all duration-200 hover:scale-105 hover:shadow-sm text-[10px] sm:text-xs ${
                 isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800' : 
                 isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800' : 
                 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
               }`}>
-                <FaCalendarAlt className="inline mr-1" /> {formatDueDate(task.dueDate)}
+                <FaCalendarAlt className="inline mr-0.5 sm:mr-1 text-[8px] sm:text-xs" /> {formatDueDate(task.dueDate)}
               </span>
             )}
             {/* Priority badge with color dot indicator */}
             {task.priority > 0 && (
-              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 transform transition-all duration-200 hover:scale-105 hover:bg-purple-200 dark:hover:bg-purple-800 hover:shadow-sm flex items-center">
-                <span className={`inline-block w-2 h-2 rounded-full mr-1 ${getPriorityColor(task.priority)}`}></span>
-                <FaFlag className="inline mx-1" /> {getPriorityLabel(task.priority)}
+              <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 transform transition-all duration-200 hover:scale-105 hover:bg-purple-200 dark:hover:bg-purple-800 hover:shadow-sm flex items-center text-[10px] sm:text-xs">
+                <span className={`inline-block w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full mr-0.5 sm:mr-1 ${getPriorityColor(task.priority)}`}></span>
+                <FaFlag className="inline mx-0.5 sm:mx-1 text-[8px] sm:text-xs" /> {getPriorityLabel(task.priority)}
               </span>
             )}
             {/* Category badge */}
             {task.category && (
-              <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 flex items-center transform transition-all duration-200 hover:scale-105 hover:bg-indigo-200 dark:hover:bg-indigo-800 hover:shadow-sm">
-                <FaTag className="mr-1" size={10} /> {task.category}
+              <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 flex items-center transform transition-all duration-200 hover:scale-105 hover:bg-indigo-200 dark:hover:bg-indigo-800 hover:shadow-sm text-[10px] sm:text-xs">
+                <FaTag className="mr-0.5 sm:mr-1" size={8} /> {task.category}
               </span>
             )}
           </div>
         </div>
       )}
 
-      {/* Action buttons - visible on hover */}
-      <div className="flex space-x-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Action buttons - always visible on mobile, hover on desktop */}
+      <div className="flex space-x-1 ml-1 sm:ml-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
         {isEditing ? (
           <>
             {/* Save button for editing mode */}
@@ -255,12 +255,12 @@ const TodoItem = ({ task }) => {
               <button 
                 onClick={handleSave} 
                 aria-label="Save"
-                className="p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
               >
-                <FaSave />
+                <FaSave className="text-sm sm:text-base" />
               </button>
-              {/* Tooltip */}
-              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+              {/* Tooltip - hidden on mobile */}
+              <div className="hidden sm:block absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
                 Save changes
               </div>
             </div>
@@ -270,12 +270,12 @@ const TodoItem = ({ task }) => {
               <button 
                 onClick={handleCancel} 
                 aria-label="Cancel"
-                className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
               >
-                <FaTimes />
+                <FaTimes className="text-sm sm:text-base" />
               </button>
-              {/* Tooltip */}
-              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+              {/* Tooltip - hidden on mobile */}
+              <div className="hidden sm:block absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
                 Cancel editing
               </div>
             </div>
@@ -287,12 +287,12 @@ const TodoItem = ({ task }) => {
               <button 
                 onClick={handleEdit} 
                 aria-label="Edit Task"
-                className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
-                <FaEdit />
+                <FaEdit className="text-sm sm:text-base" />
               </button>
-              {/* Tooltip */}
-              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+              {/* Tooltip - hidden on mobile */}
+              <div className="hidden sm:block absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
                 Edit task
               </div>
             </div>
@@ -302,12 +302,12 @@ const TodoItem = ({ task }) => {
               <button 
                 onClick={() => deleteTask(task._id)} 
                 aria-label="Delete"
-                className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
               >
-                <FaTrash />
+                <FaTrash className="text-sm sm:text-base" />
               </button>
-              {/* Tooltip */}
-              <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
+              {/* Tooltip - hidden on mobile */}
+              <div className="hidden sm:block absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap">
                 Delete task
               </div>
             </div>

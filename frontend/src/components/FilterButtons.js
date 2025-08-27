@@ -17,13 +17,42 @@ const FilterButtons = () => {
 
   if (!user) {
     return (
-      <div className="overflow-x-auto pb-2 mb-2">
-        <div className="flex space-x-2 min-w-max">
+      <div className="pb-2 mb-2">
+        {/* Mobile view - Grid layout (non-authenticated) */}
+        <div className="sm:hidden grid grid-cols-3 gap-2">
           {filterOptions.map((option) => (
             <button
               key={option.value}
               disabled
-              className="flex items-center px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-60 whitespace-nowrap"
+              className="flex flex-col items-center justify-center px-2 py-3 rounded-lg opacity-60 cursor-not-allowed text-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+            >
+              <span className="text-xl mb-1">{option.icon}</span>
+              <span className="text-xs">{option.label}</span>
+            </button>
+          ))}
+        </div>
+        
+        {/* Medium screens (non-authenticated) */}
+        <div className="hidden sm:flex lg:hidden flex-wrap justify-center gap-1.5">
+          {filterOptions.map((option) => (
+            <button
+              key={option.value}
+              disabled
+              className="flex items-center px-3 py-2 rounded-lg opacity-60 cursor-not-allowed bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+            >
+              <span className="mr-1.5">{option.icon}</span>
+              <span className="text-sm">{option.label}</span>
+            </button>
+          ))}
+        </div>
+        
+        {/* Large desktop view (non-authenticated) */}
+        <div className="hidden lg:flex space-x-3">
+          {filterOptions.map((option) => (
+            <button
+              key={option.value}
+              disabled
+              className="flex items-center px-6 py-3 rounded-lg opacity-60 cursor-not-allowed bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
             >
               <span className="mr-2">{option.icon}</span>
               {option.label}
@@ -35,12 +64,49 @@ const FilterButtons = () => {
   }
 
   return (
-    <div className="overflow-x-auto pb-2 mb-2">
-      <div className="flex space-x-2 min-w-max">
+    <div className="pb-2 mb-2">
+      {/* Mobile view - Grid layout */}
+      <div className="sm:hidden grid grid-cols-3 gap-2">
         {filterOptions.map((option) => (
           <button
             key={option.value}
-            className={`flex items-center px-6 py-3 rounded-lg transition-colors whitespace-nowrap ${
+            className={`flex flex-col items-center justify-center px-2 py-3 rounded-lg transition-colors text-center ${
+              filter === option.value 
+                ? 'bg-primary-purple text-white font-medium shadow-md' 
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+            onClick={() => setFilter(option.value)}
+          >
+            <span className="text-xl mb-1">{option.icon}</span>
+            <span className="text-xs">{option.label}</span>
+          </button>
+        ))}
+      </div>
+      
+      {/* Medium screens (tablets) - Compact layout */}
+      <div className="hidden sm:flex lg:hidden flex-wrap justify-center gap-1.5">
+        {filterOptions.map((option) => (
+          <button
+            key={option.value}
+            className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
+              filter === option.value 
+                ? 'bg-primary-purple text-white font-medium' 
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+            onClick={() => setFilter(option.value)}
+          >
+            <span className="mr-1.5">{option.icon}</span>
+            <span className="text-sm">{option.label}</span>
+          </button>
+        ))}
+      </div>
+      
+      {/* Large desktop view */}
+      <div className="hidden lg:flex space-x-3">
+        {filterOptions.map((option) => (
+          <button
+            key={option.value}
+            className={`flex items-center px-6 py-3 rounded-lg transition-colors ${
               filter === option.value 
                 ? 'bg-primary-purple text-white font-medium' 
                 : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'

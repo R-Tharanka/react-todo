@@ -12,16 +12,18 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-16 pb-12">
       <Hero />
-      <div className="max-w-4xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8 mx-4">
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-4 sm:p-6 md:p-8 mx-2 sm:mx-4">
+        <div className="mb-4 sm:mb-6">
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white flex items-center">
               <FaClipboardList className="mr-2 text-primary-purple" />
               Your Tasks
             </h2>
           </div>
           <SearchBox />
-          <FilterButtons />
+          <div className="mt-4">
+            <FilterButtons />
+          </div>
         </div>
         
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
