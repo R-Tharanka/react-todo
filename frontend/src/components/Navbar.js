@@ -53,8 +53,8 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
       scrolled 
-        ? 'bg-white/95 dark:bg-dark-bg/95 backdrop-blur-sm shadow-lg' 
-        : 'bg-white dark:bg-dark-bg'
+        ? 'bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-lg' 
+        : 'bg-white/60 dark:bg-dark-bg/60 backdrop-blur-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
@@ -112,7 +112,7 @@ const Navbar = () => {
                 </div>
                 
                 {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 z-10 animate-fadeIn">
+                  <div className="absolute right-0 mt-2 w-48 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md border border-gray-200/70 dark:border-gray-700/70 rounded-lg shadow-lg py-1 z-10 animate-fadeIn">
                     <Link 
                       to="/profile" 
                       onClick={() => setShowDropdown(false)}
@@ -144,7 +144,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden transition-all duration-300 ${showMenu ? 'max-h-96' : 'max-h-0'} overflow-hidden bg-white dark:bg-dark-bg border-t border-gray-200 dark:border-gray-800`}>
+      <div className={`md:hidden transition-all duration-300 ${showMenu ? 'max-h-96' : 'max-h-0'} overflow-hidden bg-white/70 dark:bg-dark-bg/70 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50`}>
         <div className="px-4 py-3 space-y-2">
           {/* Theme toggle for mobile */}
           <div className="flex justify-center py-3 border-b border-gray-200 dark:border-gray-700">

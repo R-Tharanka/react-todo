@@ -138,7 +138,7 @@ const Hero = () => {
       
       {/* Quick Task Input Section */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 mt-10">
-        <div className="bg-white/40 dark:bg-card-bg/40 backdrop-blur-md rounded-lg p-4 shadow-lg">
+        <div className="bg-white/40 dark:bg-card-bg backdrop-blur-md rounded-lg p-4 shadow-lg">
           <div className="flex flex-col md:flex-row gap-4">
             <input 
               type="text" 
@@ -149,7 +149,7 @@ const Hero = () => {
               onKeyPress={handleKeyPress}
             />
             <button 
-              className="bg-gradient-to-r from-primary-purple to-secondary-purple hover:opacity-90 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
+              className="bg-primary-purple hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
               onClick={handleAddTask}
             >
               <span className="text-xl">+</span> Add Task
