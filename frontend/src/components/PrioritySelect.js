@@ -35,6 +35,15 @@ const PrioritySelect = ({ selectedPriority, onPriorityChange }) => {
       default: return 'text-gray-400';
     }
   };
+  
+  const getPriorityDotColor = (priority) => {
+    switch(priority) {
+      case 3: return 'bg-red-500';
+      case 2: return 'bg-yellow-500';
+      case 1: return 'bg-blue-500';
+      default: return 'bg-gray-400';
+    }
+  };
 
   const getPriorityLabel = (priority) => {
     switch(priority) {
@@ -51,8 +60,9 @@ const PrioritySelect = ({ selectedPriority, onPriorityChange }) => {
         className="flex items-center px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer"
         onClick={toggleDropdown}
       >
-        <FaFlag className={`mr-2 ${getPriorityColor(selectedPriority)}`} />
-        <span className="text-gray-700 dark:text-gray-300">
+        <span className={`inline-block w-2 h-2 rounded-full mr-1 ${getPriorityDotColor(selectedPriority)}`}></span>
+        <FaFlag className={`mx-1 ${getPriorityColor(selectedPriority)}`} />
+        <span className="text-gray-700 dark:text-gray-300 ml-1">
           {getPriorityLabel(selectedPriority)}
         </span>
       </div>
@@ -67,8 +77,9 @@ const PrioritySelect = ({ selectedPriority, onPriorityChange }) => {
               }`}
               onClick={() => handlePrioritySelect(priority)}
             >
-              <FaFlag className={`mr-2 ${getPriorityColor(priority)}`} />
-              {getPriorityLabel(priority)}
+              <span className={`inline-block w-2 h-2 rounded-full mr-1 ${getPriorityDotColor(priority)}`}></span>
+              <FaFlag className={`mx-1 ${getPriorityColor(priority)}`} />
+              <span className="ml-1">{getPriorityLabel(priority)}</span>
             </div>
           ))}
         </div>

@@ -59,6 +59,16 @@ const getPriorityLabel = (priority) => {
   }
 };
 
+// Returns the color class for the priority dot indicator
+const getPriorityColor = (priority) => {
+  switch(priority) {
+    case 3: return 'bg-red-500';
+    case 2: return 'bg-yellow-500';
+    case 1: return 'bg-blue-500';
+    default: return 'bg-gray-400';
+  }
+};
+
 const TodoItem = ({ task }) => {
   // State for tracking editing mode and task properties
   const [isEditing, setIsEditing] = useState(false);
@@ -219,10 +229,11 @@ const TodoItem = ({ task }) => {
                 <FaCalendarAlt className="inline mr-1" /> {formatDueDate(task.dueDate)}
               </span>
             )}
-            {/* Priority badge */}
+            {/* Priority badge with color dot indicator */}
             {task.priority > 0 && (
-              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 transform transition-all duration-200 hover:scale-105 hover:bg-purple-200 dark:hover:bg-purple-800 hover:shadow-sm">
-                <FaFlag className="inline mr-1" /> {getPriorityLabel(task.priority)}
+              <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 transform transition-all duration-200 hover:scale-105 hover:bg-purple-200 dark:hover:bg-purple-800 hover:shadow-sm flex items-center">
+                <span className={`inline-block w-2 h-2 rounded-full mr-1 ${getPriorityColor(task.priority)}`}></span>
+                <FaFlag className="inline mx-1" /> {getPriorityLabel(task.priority)}
               </span>
             )}
             {/* Category badge */}
