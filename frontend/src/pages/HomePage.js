@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import TodoList from '../components/TodoList';
-import TodoForm from '../components/TodoForm';
 import SearchBox from '../components/SearchBox';
 import FilterButtons from '../components/FilterButtons';
 import Hero from '../components/Hero';
@@ -14,9 +13,7 @@ const HomePage = () => {
     <div className="min-h-screen pt-16 pb-12">
       <Hero />
       <div className="max-w-2xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8 mx-4">
-        <TodoForm />
-        
-        <div className="mt-8">
+        <div className="mt-4">
           <SearchBox />
           <FilterButtons />
         </div>

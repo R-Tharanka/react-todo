@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
 import { FaCheckCircle, FaHourglassHalf, FaCalendar, FaFlag } from 'react-icons/fa';
@@ -175,18 +176,27 @@ const Hero = () => {
                 value={newTaskText}
                 onChange={(e) => setNewTaskText(e.target.value)}
                 onKeyPress={handleKeyPress}
-                onFocus={() => setIsInputFocused(true)}
+                onFocus={() => user && setIsInputFocused(true)}
+                disabled={!user}
               />
               <button 
-                className="bg-primary-purple hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all"
-                onClick={handleAddTask}
+                className={`${user ? 'bg-primary-purple hover:bg-primary-hover' : 'bg-gray-400 cursor-not-allowed'} text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all`}
+                onClick={user ? handleAddTask : undefined}
+                disabled={!user}
               >
                 <span className="text-xl">+</span> Add Task
               </button>
             </div>
             
+            {/* Login/Register prompt for non-logged in users */}
+            {!user && (
+              <div className="text-center py-2 text-sm text-gray-600 dark:text-gray-400">
+                <Link to="/login" className="text-primary-purple hover:underline">Login</Link> or <Link to="/register" className="text-primary-purple hover:underline">Register</Link> to add and manage tasks
+              </div>
+            )}
+            
             {/* Additional options that appear when input is focused or has text */}
-            {(isInputFocused || newTaskText.trim().length > 0) && (
+            {user && (isInputFocused || newTaskText.trim().length > 0) && (
               <div className="flex flex-col md:flex-row items-center gap-4 py-2 animate-fadeIn">
                 {/* Due Date Selector */}
                 <div className="flex items-center w-full md:w-1/2 relative">
