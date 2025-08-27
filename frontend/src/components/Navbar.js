@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
 import { 
   FaUser, FaSignOutAlt, FaUserEdit, FaClipboardList, 
-  FaBars, FaTimes, FaSun, FaMoon
+  FaBars, FaTimes, FaSun, FaMoon, FaTasks
 } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -61,10 +61,10 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center group">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary-purple to-secondary-purple text-white transform transition-transform group-hover:scale-105">
-                <FaClipboardList className="h-5 w-5" />
-              </div>
-              <span className="ml-2 text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-purple to-secondary-purple">TaskMaster</span>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
+                <FaTasks className="mr-2 text-primary-purple" />
+                Task Manager
+              </h2>
             </Link>
           </div>
           

@@ -4,7 +4,7 @@ import SearchBox from '../components/SearchBox';
 import FilterButtons from '../components/FilterButtons';
 import Hero from '../components/Hero';
 import { TodoContext } from '../context/TodoContext';
-import { FaSpinner, FaTasks } from 'react-icons/fa';
+import { FaSpinner, FaClipboardList } from 'react-icons/fa';
 
 const HomePage = () => {
   const { loading, error } = useContext(TodoContext);
@@ -16,8 +16,8 @@ const HomePage = () => {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
-              <FaTasks className="mr-2 text-primary-purple" />
-              Task Manager
+              <FaClipboardList className="mr-2 text-primary-purple" />
+              Your Tasks
             </h2>
           </div>
           <SearchBox />
