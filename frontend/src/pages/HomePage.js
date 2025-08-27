@@ -12,12 +12,14 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-16 pb-12">
       <Hero />
-      <div className="max-w-2xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8 mx-4">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-6 md:p-8 mx-4">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
-            <FaTasks className="mr-2 text-primary-purple" />
-            Task Manager
-          </h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
+              <FaTasks className="mr-2 text-primary-purple" />
+              Task Manager
+            </h2>
+          </div>
           <SearchBox />
           <FilterButtons />
         </div>

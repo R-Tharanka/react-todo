@@ -13,6 +13,7 @@ export const TodoProvider = ({ children }) => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('newest');
+  const [dueDate, setDueDate] = useState(null);
   const { user } = useContext(AuthContext);
   
   // Load tasks when user is authenticated
@@ -61,7 +62,7 @@ export const TodoProvider = ({ children }) => {
   };
   
   // Add a new task
-  const addTask = async (text) => {
+  const addTask = async (text, dueDate = null, priority = 0) => {
     if (!text || text.trim() === '') {
       setError('Task text cannot be empty!');
       return;
@@ -69,7 +70,21 @@ export const TodoProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      const response = await axios.post(API_URL, { text });
+      const taskData = { 
+        text, 
+        completed: false,
+        createdAt: new Date().toISOString()
+      };
+      
+      if (dueDate) {
+        taskData.dueDate = dueDate;
+      }
+      
+      if (priority > 0) {
+        taskData.priority = priority;
+      }
+      
+      const response = await axios.post(API_URL, taskData);
       setTasks([response.data, ...tasks]);
       setError(null);
     } catch (error) {
@@ -81,7 +96,7 @@ export const TodoProvider = ({ children }) => {
   };
   
   // Update an existing task
-  const updateTask = async (id, updatedText) => {
+  const updateTask = async (id, updatedText, dueDate = null, priority = null) => {
     if (!updatedText || updatedText.trim() === '') {
       setError('Task text cannot be empty!');
       return;
@@ -89,7 +104,19 @@ export const TodoProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      const response = await axios.put(`${API_URL}/${id}`, { text: updatedText });
+      // Get the existing task to preserve any fields we're not updating
+      const existingTask = tasks.find(task => task._id === id);
+      if (!existingTask) {
+        throw new Error('Task not found');
+      }
+      
+      const updateData = {
+        text: updatedText,
+        dueDate: dueDate !== null ? dueDate : existingTask.dueDate,
+        priority: priority !== null ? priority : existingTask.priority
+      };
+      
+      const response = await axios.put(`${API_URL}/${id}`, updateData);
       setTasks(tasks.map(task => task._id === id ? response.data : task));
       setError(null);
     } catch (error) {
@@ -145,11 +172,54 @@ export const TodoProvider = ({ children }) => {
   const getFilteredTasks = () => {
     let filteredTasks = [...tasks];
     
-    // Apply filter (all, active, completed)
-    if (filter === 'active') {
-      filteredTasks = filteredTasks.filter(task => !task.completed);
-    } else if (filter === 'completed') {
-      filteredTasks = filteredTasks.filter(task => task.completed);
+    // Apply filter
+    switch (filter) {
+      case 'completed':
+        filteredTasks = filteredTasks.filter(task => task.completed);
+        break;
+      case 'today':
+        // Filter tasks due today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        filteredTasks = filteredTasks.filter(task => {
+          if (!task.dueDate) return false;
+          const taskDate = new Date(task.dueDate);
+          return taskDate >= today && taskDate < tomorrow;
+        });
+        break;
+      case 'upcoming':
+        // Filter tasks due in the future (after today)
+        const futureDate = new Date();
+        futureDate.setHours(0, 0, 0, 0);
+        futureDate.setDate(futureDate.getDate() + 1);
+        
+        filteredTasks = filteredTasks.filter(task => {
+          if (!task.dueDate) return false;
+          const taskDate = new Date(task.dueDate);
+          return taskDate >= futureDate && !task.completed;
+        });
+        break;
+      case 'overdue':
+        // Filter overdue tasks (past due date and not completed)
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        filteredTasks = filteredTasks.filter(task => {
+          if (!task.dueDate || task.completed) return false;
+          const taskDate = new Date(task.dueDate);
+          taskDate.setHours(0, 0, 0, 0);
+          return taskDate < currentDate;
+        });
+        break;
+      case 'all':
+        // No additional filtering for 'all'
+        break;
+      default:
+        // Default is to show all tasks
+        break;
     }
     
     // Apply search
@@ -168,7 +238,7 @@ export const TodoProvider = ({ children }) => {
         filteredTasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
       case 'priority':
-        // Assuming priority is a field in task object, if not, you'll need to add it
+        // Sort by priority (high to low)
         filteredTasks.sort((a, b) => (b.priority || 0) - (a.priority || 0));
         break;
       case 'az':
@@ -191,9 +261,11 @@ export const TodoProvider = ({ children }) => {
         filter,
         searchTerm,
         sortBy,
+        dueDate,
         setFilter,
         setSearchTerm,
         setSortBy,
+        setDueDate,
         getFilteredTasks,
         addTask,
         updateTask,

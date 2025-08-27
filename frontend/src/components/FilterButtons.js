@@ -1,27 +1,29 @@
 import React, { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
-import { FaCheckCircle, FaCircle, FaListUl } from 'react-icons/fa';
+import { FaListUl, FaCalendarDay, FaCalendarAlt, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
 
 const FilterButtons = () => {
   const { filter, setFilter } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
 
   const filterOptions = [
-    { value: 'all', label: 'All', icon: <FaListUl /> },
-    { value: 'active', label: 'Active', icon: <FaCircle className="text-sm" /> },
+    { value: 'all', label: 'All Tasks', icon: <FaListUl /> },
+    { value: 'today', label: 'Today', icon: <FaCalendarDay /> },
+    { value: 'upcoming', label: 'Upcoming', icon: <FaCalendarAlt /> },
+    { value: 'overdue', label: 'Overdue', icon: <FaExclamationTriangle /> },
     { value: 'completed', label: 'Completed', icon: <FaCheckCircle /> },
   ];
 
   if (!user) {
     return (
-      <div className="flex justify-center my-6">
-        <div className="inline-flex p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+      <div className="overflow-x-auto pb-2 mb-2">
+        <div className="flex space-x-2 min-w-max">
           {filterOptions.map((option) => (
             <button
               key={option.value}
               disabled
-              className="flex items-center px-4 py-2 rounded-md transition-colors text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-60"
+              className="flex items-center px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-60 whitespace-nowrap"
             >
               <span className="mr-2">{option.icon}</span>
               {option.label}
@@ -33,15 +35,15 @@ const FilterButtons = () => {
   }
 
   return (
-    <div className="flex justify-center my-6">
-      <div className="inline-flex p-1 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
+    <div className="overflow-x-auto pb-2 mb-2">
+      <div className="flex space-x-2 min-w-max">
         {filterOptions.map((option) => (
           <button
             key={option.value}
-            className={`flex items-center px-4 py-2 rounded-md transition-colors ${
+            className={`flex items-center px-6 py-3 rounded-lg transition-colors whitespace-nowrap ${
               filter === option.value 
-                ? 'bg-white dark:bg-card-bg text-primary-purple shadow-sm' 
-                : 'text-gray-700 dark:text-gray-300 hover:text-primary-purple dark:hover:text-primary-purple'
+                ? 'bg-primary-purple text-white font-medium' 
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
             }`}
             onClick={() => setFilter(option.value)}
           >

@@ -37,18 +37,23 @@ const Hero = () => {
     };
   }, [taskInputRef, newTaskText]);
   
+  // Convert string priority to number
+  const getPriorityValue = (priorityStr) => {
+    switch(priorityStr) {
+      case 'high': return 3;
+      case 'medium': return 2;
+      case 'low': return 1;
+      default: return 0;
+    }
+  };
+
   // Handle quick task creation
   const handleAddTask = () => {
     if (newTaskText.trim()) {
-      const newTask = {
-        text: newTaskText,
-        completed: false,
-        category: selectedCategory || 'Personal',
-        priority: priority,
-        dueDate: dueDate || null,
-        date: new Date().toISOString()
-      };
-      addTask(newTask);
+      const priorityValue = getPriorityValue(priority);
+      const dueDateValue = dueDate ? new Date(dueDate).toISOString() : null;
+      
+      addTask(newTaskText, dueDateValue, priorityValue);
       setNewTaskText('');
       setSelectedCategory('');
       setDueDate('');
