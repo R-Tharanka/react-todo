@@ -84,8 +84,8 @@ const Hero = () => {
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4 pb-8">
         {/* Animated heading */}
         <motion.h1 
-          className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-purple to-secondary-purple mb-6"
-          style={{ lineHeight: 'normal' }}
+          className="text-5xl md:text-6xl font-bold text-white mb-6"
+          style={{ lineHeight: 'normal', textShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
