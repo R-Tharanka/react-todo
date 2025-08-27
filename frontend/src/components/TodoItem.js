@@ -116,8 +116,8 @@ const TodoItem = ({ task }) => {
       <div 
         className={`h-6 w-6 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors ${
           task.completed 
-            ? 'bg-primary-purple border-2 border-primary-purple' 
-            : 'border-2 border-gray-300 dark:border-gray-600 hover:border-primary-purple dark:hover:border-primary-purple'
+            ? 'bg-green-500 border-2 border-green-500' 
+            : 'border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 dark:hover:border-green-500'
         }`}
         onClick={() => toggleComplete(task._id)}
         role="checkbox"
