@@ -1,10 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
+import API from '../config/api';
 
 export const TodoContext = createContext();
 
-const API_URL = '/api/tasks';
+// Use API.baseURL + /api/tasks
+const API_URL = `${API.baseURL}/api/tasks`;
 
 export const TodoProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);

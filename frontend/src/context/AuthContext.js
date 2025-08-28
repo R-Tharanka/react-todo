@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import API from '../config/api';
 
 export const AuthContext = createContext();
 
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.post('/api/users/register', {
+      const { data } = await axios.post(`${API.baseURL}/api/users/register`, {
         name,
         email,
         password
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.post('/api/users/login', {
+      const { data } = await axios.post(`${API.baseURL}/api/users/login`, {
         email,
         password
       });
@@ -155,7 +156,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('darkMode', userData.preferences.darkMode);
       }
       
-      const { data } = await axios.put('/api/users/profile', userData);
+      const { data } = await axios.put(`${API.baseURL}/api/users/profile`, userData);
       
       // Update user state with new data
       setUser(prev => ({
