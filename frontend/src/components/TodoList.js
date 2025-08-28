@@ -96,26 +96,29 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`${snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""} ${selectMode ? "relative" : ""}`}
+                    className={`${snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""} ${selectMode ? "relative overflow-hidden" : ""} mb-2 group`}
                   >
                     {selectMode && (
                       <div 
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10"
+                        className={`absolute left-0 top-0 bottom-0 w-12 px-3 flex items-center justify-center ${selectedTasks.includes(task._id) ? 'bg-primary-purple/10 dark:bg-primary-purple/20' : 'bg-primary-purple/5 dark:bg-primary-purple/10'} rounded-l-lg z-10 group-hover:shadow-md transition-all duration-200 ease-in-out border-r border-gray-200/50 dark:border-gray-600/50`}
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleTaskSelection(task._id);
                         }}
                       >
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer
-                          ${selectedTasks.includes(task._id) 
-                            ? 'bg-primary-purple border-primary-purple' 
-                            : 'border-gray-400 dark:border-gray-500 bg-white dark:bg-gray-700'}`}
-                        >
-                          {selectedTasks.includes(task._id) && (
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
+                        <div className="flex flex-col items-center">
+                          <div className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center cursor-pointer transition-all duration-200
+                            ${selectedTasks.includes(task._id) 
+                              ? 'bg-primary-purple border-primary-purple scale-110' 
+                              : 'border-gray-400 dark:border-gray-500 bg-white/80 dark:bg-gray-700/80 hover:border-primary-purple hover:scale-105'}`}
+                          >
+                            {selectedTasks.includes(task._id) && (
+                              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
+                          <span className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300">Select</span>
                         </div>
                       </div>
                     )}

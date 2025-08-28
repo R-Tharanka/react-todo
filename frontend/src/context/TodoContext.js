@@ -5,6 +5,36 @@ import API from '../config/api';
 
 export const TodoContext = createContext();
 
+// Configure axios with interceptors for better debugging
+axios.interceptors.request.use(request => {
+  console.log('Starting Request', {
+    url: request.url,
+    method: request.method,
+    data: request.data
+  });
+  return request;
+});
+
+axios.interceptors.response.use(
+  response => {
+    console.log('Response:', {
+      status: response.status,
+      data: response.data
+    });
+    return response;
+  },
+  error => {
+    console.error('Response Error:', {
+      message: error.message,
+      response: error.response ? {
+        status: error.response.status,
+        data: error.response.data
+      } : 'No response received'
+    });
+    return Promise.reject(error);
+  }
+);
+
 // Use API.baseURL + /api/tasks
 const API_URL = `${API.baseURL}/api/tasks`;
 

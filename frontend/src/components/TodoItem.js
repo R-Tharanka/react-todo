@@ -135,23 +135,26 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
 
   return (
     <li className={`bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative ${
-      selectMode ? 'pl-9' : ''
+      selectMode ? 'pl-14' : ''
     } ${
       isSelected ? 'ring-2 ring-primary-purple bg-primary-purple/5 dark:bg-primary-purple/10' : ''
     }`}>
       {/* Task completion checkbox */}
-      <div 
-        className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full mr-3 cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
-          task.completed 
-            ? 'bg-green-500 border-2 border-green-500' 
-            : 'border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 dark:hover:border-green-500'
-        }`}
-        onClick={() => toggleComplete(task._id)}
-        role="checkbox"
-        aria-checked={task.completed}
-        tabIndex={0}
-      >
-        {task.completed && <FaCheck className="text-white text-sm" />}
+      <div className="flex flex-col items-center mr-3">
+        <div 
+          className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
+            task.completed 
+              ? 'bg-green-500 border-2 border-green-500' 
+              : 'border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 dark:hover:border-green-500'
+          }`}
+          onClick={() => toggleComplete(task._id)}
+          role="checkbox"
+          aria-checked={task.completed}
+          tabIndex={0}
+        >
+          {task.completed && <FaCheck className="text-white text-sm" />}
+        </div>
+        <span className="text-[9px] mt-1 text-gray-500 dark:text-gray-400">Done</span>
       </div>
 
       {/* Task editing form or display */}

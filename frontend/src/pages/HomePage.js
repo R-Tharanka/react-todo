@@ -18,13 +18,21 @@ const HomePage = () => {
   // Check if scroll hint should be shown
   // Handle option to select multiple tasks
   const handleSelectMultiple = () => {
+    console.log('handleSelectMultiple called');
     setSelectMode(true);
     setShowOptionsMenu(false);
-    info('Select mode activated. Tap on tasks to select them.');
+    success('Selection Mode Activated! Click on the checkboxes on the left side to select tasks.');
+    console.log('Select mode should now be:', true);
   };
   
   // Handle clearing completed tasks
-  const handleClearCompleted = async () => {
+  const handleClearCompleted = async (e) => {
+    // If event is provided, prevent default behavior
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     console.log('Clearing completed tasks...');
     const completedTasksCount = tasks.filter(task => task.completed).length;
     console.log(`Found ${completedTasksCount} completed tasks to delete`);
@@ -74,7 +82,12 @@ const HomePage = () => {
   // Close options menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Add logging to debug click events
+      console.log('Click detected:', event.target);
+      console.log('Is .options-menu element?', !!event.target.closest('.options-menu'));
+      
       if (showOptionsMenu && !event.target.closest('.options-menu')) {
+        console.log('Closing menu due to outside click');
         setShowOptionsMenu(false);
       }
     };
@@ -134,10 +147,13 @@ const HomePage = () => {
                 </svg>
               </button>
               {showOptionsMenu && (
-                <div className="absolute right-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
+                <div className="absolute right-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10 options-menu">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <button
-                      onClick={handleSelectMultiple}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent event from bubbling up
+                        handleSelectMultiple();
+                      }}
                       className={`w-full text-left px-4 py-2 text-sm ${selectMode 
                         ? 'bg-primary-purple text-white hover:bg-primary-purple/90' 
                         : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -151,7 +167,10 @@ const HomePage = () => {
                       {selectMode ? 'Selection Mode Active' : 'Select Multiple'}
                     </button>
                     <button
-                      onClick={handleClearCompleted}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent event from bubbling up
+                        handleClearCompleted();
+                      }}
                       className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                       role="menuitem"
                       disabled={tasks.filter(task => task.completed).length === 0}
