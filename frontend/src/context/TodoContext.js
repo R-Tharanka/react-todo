@@ -199,20 +199,30 @@ export const TodoProvider = ({ children }) => {
   
   // Delete multiple tasks at once
   const deleteMultipleTasks = async (taskIds) => {
-    if (!taskIds.length) return;
+    if (!taskIds.length) {
+      console.log('No tasks to delete (empty taskIds array)');
+      return;
+    }
     
+    console.log(`Deleting multiple tasks. Task IDs:`, taskIds);
     setLoading(true);
     try {
       // Create an array of promises for each delete operation
-      const deletePromises = taskIds.map(id => 
-        axios.delete(`${API_URL}/${id}`)
-      );
+      const deletePromises = taskIds.map(id => {
+        console.log(`Sending DELETE request for task ${id}`);
+        return axios.delete(`${API_URL}/${id}`);
+      });
       
       // Wait for all delete operations to complete
       await Promise.all(deletePromises);
+      console.log('All delete operations completed successfully');
       
       // Remove the deleted tasks from state
-      setTasks(tasks.filter(task => !taskIds.includes(task._id)));
+      setTasks(prevTasks => {
+        const newTasks = prevTasks.filter(task => !taskIds.includes(task._id));
+        console.log(`Filtered tasks. Before: ${prevTasks.length}, After: ${newTasks.length}`);
+        return newTasks;
+      });
       setError(null);
     } catch (error) {
       console.error('Error deleting multiple tasks:', error);
@@ -224,9 +234,14 @@ export const TodoProvider = ({ children }) => {
   
   // Delete all completed tasks
   const deleteCompletedTasks = async () => {
+    console.log('deleteCompletedTasks function called');
+    console.log('Current tasks:', tasks);
+    
     const completedTaskIds = tasks
       .filter(task => task.completed)
       .map(task => task._id);
+      
+    console.log('Completed tasks IDs:', completedTaskIds);
       
     if (completedTaskIds.length === 0) {
       console.log('No completed tasks to delete');
@@ -234,7 +249,8 @@ export const TodoProvider = ({ children }) => {
     }
     
     console.log(`Deleting ${completedTaskIds.length} completed tasks`);
-    deleteMultipleTasks(completedTaskIds);
+    await deleteMultipleTasks(completedTaskIds);
+    console.log('Completed tasks deletion finished');
   };
   
   // Get filtered tasks (mostly used for search functionality)

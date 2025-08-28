@@ -24,7 +24,7 @@ const HomePage = () => {
   };
   
   // Handle clearing completed tasks
-  const handleClearCompleted = () => {
+  const handleClearCompleted = async () => {
     console.log('Clearing completed tasks...');
     const completedTasksCount = tasks.filter(task => task.completed).length;
     console.log(`Found ${completedTasksCount} completed tasks to delete`);
@@ -32,21 +32,36 @@ const HomePage = () => {
     if (completedTasksCount === 0) {
       info('No completed tasks to delete');
     } else {
-      deleteCompletedTasks();
-      success(`Deleted ${completedTasksCount} completed task${completedTasksCount > 1 ? 's' : ''}`);
+      try {
+        await deleteCompletedTasks();
+        success(`Deleted ${completedTasksCount} completed task${completedTasksCount > 1 ? 's' : ''}`);
+      } catch (error) {
+        console.error("Error in handleClearCompleted:", error);
+        showError('Failed to delete completed tasks');
+      }
     }
     
     setShowOptionsMenu(false);
   };
   
   // Handle bulk deletion of selected tasks
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
+    console.log('Delete selected tasks button clicked');
+    console.log('Selected tasks IDs:', selectedTasks);
+    
     if (selectedTasks.length > 0) {
-      // Call the context function to delete multiple tasks
-      deleteMultipleTasks(selectedTasks);
-      success(`Deleted ${selectedTasks.length} task${selectedTasks.length > 1 ? 's' : ''}`);
-      setSelectedTasks([]);
-      setSelectMode(false);
+      try {
+        // Call the context function to delete multiple tasks
+        await deleteMultipleTasks(selectedTasks);
+        success(`Deleted ${selectedTasks.length} task${selectedTasks.length > 1 ? 's' : ''}`);
+        setSelectedTasks([]);
+        setSelectMode(false);
+      } catch (error) {
+        console.error("Error in handleDeleteSelected:", error);
+        showError('Failed to delete selected tasks');
+      }
+    } else {
+      info('No tasks selected for deletion');
     }
   };
   

@@ -70,6 +70,7 @@ const getPriorityColor = (priority) => {
 };
 
 const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
+  console.log(`Rendering TodoItem for task ${task._id}, selectMode: ${selectMode}, isSelected: ${isSelected}`);
   // State for tracking editing mode and task properties
   const [isEditing, setIsEditing] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -213,11 +214,8 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           <p 
             className={`text-gray-800 dark:text-white ${
               task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
-            } cursor-pointer hover:text-primary-purple dark:hover:text-primary-purple transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
-            onClick={handleEdit}
+            } hover:text-primary-purple dark:hover:text-primary-purple transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
             tabIndex={0}
-            role="button"
-            aria-label="Edit task"
           >
             {task.text}
           </p>

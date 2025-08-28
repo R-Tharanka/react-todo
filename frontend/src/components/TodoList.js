@@ -12,10 +12,13 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
   
   // Toggle task selection
   const toggleTaskSelection = (taskId) => {
+    console.log(`Toggling selection for task ID: ${taskId}`);
     if (selectedTasks.includes(taskId)) {
-      setSelectedTasks(selectedTasks.filter(id => id !== taskId));
+      console.log(`Task ${taskId} is already selected, removing from selection`);
+      setSelectedTasks(prevSelected => prevSelected.filter(id => id !== taskId));
     } else {
-      setSelectedTasks([...selectedTasks, taskId]);
+      console.log(`Adding task ${taskId} to selection`);
+      setSelectedTasks(prevSelected => [...prevSelected, taskId]);
     }
   };
 
