@@ -11,7 +11,6 @@ import ProfilePage from './pages/ProfilePage';
 
 // Components
 import Navbar from './components/Navbar';
-import ThemeToggle from './components/ThemeToggle';
 import PrivateRoute from './components/PrivateRoute';
 import Footer from './components/Footer';
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { FaHeart, FaGithub, FaTasks, FaRocket } from 'react-icons/fa';
+import { FaGithub, FaTasks, FaRocket } from 'react-icons/fa';
 import { ThemeContext } from '../context/ThemeContext';
 
 const Footer = () => {

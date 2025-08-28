@@ -91,6 +91,7 @@ export const TodoProvider = ({ children }) => {
       // Clear tasks when logged out
       setTasks([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Save tasks to localStorage whenever tasks change
@@ -108,6 +109,7 @@ export const TodoProvider = ({ children }) => {
     if (user) {
       fetchTasks();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, sortBy]);
 
   /**
