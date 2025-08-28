@@ -134,10 +134,10 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   };
 
   return (
-    <li className={`bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:translate-y-[-1px] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative ${
+    <li className={`bg-primary-purple dark:bg-purple-800 border-2 border-purple-300 dark:border-purple-700 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-lg hover:translate-y-[-1px] hover:border-white dark:hover:border-white transform duration-200 ease-in-out group relative ${
       selectMode ? 'pl-14' : ''
     } ${
-      isSelected ? 'ring-2 ring-primary-purple bg-primary-purple/5 dark:bg-primary-purple/10' : ''
+      isSelected ? 'ring-2 ring-white bg-purple-700 dark:bg-purple-700' : ''
     }`}>
       {/* Task completion checkbox */}
       <div className="flex flex-col items-center mr-3">
@@ -145,7 +145,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
             task.completed 
               ? 'bg-green-500 border-2 border-green-500' 
-              : 'border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 dark:hover:border-green-500'
+              : 'border-2 border-white hover:border-green-300 dark:border-purple-300 dark:hover:border-green-300'
           }`}
           onClick={() => toggleComplete(task._id)}
           role="checkbox"
@@ -154,7 +154,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
         >
           {task.completed && <FaCheck className="text-white text-sm" />}
         </div>
-        <span className="text-[9px] mt-1 text-gray-500 dark:text-gray-400">Done</span>
+        <span className="text-[10px] font-medium mt-1 bg-white/20 dark:bg-white/20 text-white dark:text-white px-1.5 py-0.5 rounded-sm">Done</span>
       </div>
 
       {/* Task editing form or display */}
@@ -162,7 +162,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
         <div className="flex-grow flex flex-col space-y-3">
           <input
             type="text"
-            className="w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-primary-purple focus:border-transparent focus:outline-none"
+            className="w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border border-purple-300 dark:border-purple-600 focus:ring-2 focus:ring-white focus:border-transparent focus:outline-none"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             autoFocus
@@ -215,9 +215,9 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
       ) : (
         <div className="flex-grow">
           <p 
-            className={`text-gray-800 dark:text-white ${
-              task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
-            } hover:text-primary-purple dark:hover:text-primary-purple transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
+            className={`text-white dark:text-white ${
+              task.completed ? 'line-through text-purple-200 dark:text-purple-300' : ''
+            } hover:text-purple-100 dark:hover:text-purple-100 transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
             tabIndex={0}
           >
             {task.text}
@@ -260,7 +260,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               <button 
                 onClick={handleSave} 
                 aria-label="Save"
-                className="p-1.5 sm:p-2 rounded-full hover:bg-green-100 dark:hover:bg-green-900 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-green-400 dark:hover:bg-green-700 text-white dark:text-white hover:text-green-100 dark:hover:text-green-200 transition-colors"
               >
                 <FaSave className="text-sm sm:text-base" />
               </button>
@@ -275,7 +275,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               <button 
                 onClick={handleCancel} 
                 aria-label="Cancel"
-                className="p-1.5 sm:p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-red-400 dark:hover:bg-red-700 text-white dark:text-white hover:text-red-100 dark:hover:text-red-200 transition-colors"
               >
                 <FaTimes className="text-sm sm:text-base" />
               </button>
@@ -292,7 +292,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               <button 
                 onClick={handleEdit} 
                 aria-label="Edit Task"
-                className="p-1.5 sm:p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-blue-400 dark:hover:bg-blue-700 text-white dark:text-white hover:text-blue-100 dark:hover:text-blue-200 transition-colors"
               >
                 <FaEdit className="text-sm sm:text-base" />
               </button>
@@ -307,7 +307,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               <button 
                 onClick={() => deleteTask(task._id)} 
                 aria-label="Delete"
-                className="p-1.5 sm:p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-red-400 dark:hover:bg-red-700 text-white dark:text-white hover:text-red-100 dark:hover:text-red-200 transition-colors"
               >
                 <FaTrash className="text-sm sm:text-base" />
               </button>
@@ -323,8 +323,8 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
       {/* Task details modal for editing metadata */}
       {showDetailsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div ref={modalRef} className="bg-white dark:bg-card-bg rounded-lg shadow-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+          <div ref={modalRef} className="bg-purple-100 dark:bg-purple-900 rounded-lg shadow-xl p-6 max-w-md w-full">
+            <h3 className="text-lg font-medium text-purple-900 dark:text-white mb-4">
               Task Details
             </h3>
             
@@ -380,7 +380,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
             <div className="mt-6 flex justify-end space-x-3">
               <button
                 onClick={() => setShowDetailsModal(false)}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+                className="px-4 py-2 bg-purple-200 dark:bg-purple-800 text-purple-900 dark:text-purple-100 rounded-md hover:bg-purple-300 dark:hover:bg-purple-700"
               >
                 Cancel
               </button>
