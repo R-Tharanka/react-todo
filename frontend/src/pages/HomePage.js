@@ -230,7 +230,7 @@ const HomePage = () => {
               )}
               
               <div 
-                className={`${selectMode ? 'h-[30rem] sm:h-[31rem] md:h-[33rem]' : 'h-[33rem] sm:h-[34rem] md:h-[36rem]'} overflow-y-auto overflow-x-hidden px-2 custom-scrollbar task-container`}
+                className={`${selectMode ? 'max-h-[30rem] sm:max-h-[31rem] md:max-h-[33rem]' : 'max-h-[33rem] sm:max-h-[34rem] md:max-h-[36rem]'} min-h-[10rem] overflow-y-auto overflow-x-hidden px-2 custom-scrollbar task-container`}
                 id="task-scroll-container"
               >
                 <TodoList 
