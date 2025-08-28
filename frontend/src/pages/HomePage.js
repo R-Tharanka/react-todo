@@ -259,7 +259,7 @@ const HomePage = () => {
       </div>
       
       {/* Productivity Tips Section - Separate from task section */}
-      <div className="max-w-4xl mx-auto mt-20 mb-4  p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto mt-12 sm:mt-16 md:mt-20 mb-4 p-4 sm:p-6 md:p-8">
         <ProductivityTips />
       </div>
     </div>
