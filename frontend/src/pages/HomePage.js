@@ -4,10 +4,12 @@ import SearchBox from '../components/SearchBox';
 import FilterButtons from '../components/FilterButtons';
 import Hero from '../components/Hero';
 import { TodoContext } from '../context/TodoContext';
+import { useNotification } from '../context/NotificationContext';
 import { FaSpinner, FaClipboardList, FaTrash, FaTimes } from 'react-icons/fa';
 
 const HomePage = () => {
-  const { loading, error, tasks, deleteCompletedTasks } = useContext(TodoContext);
+  const { loading, error, tasks, deleteCompletedTasks, deleteMultipleTasks } = useContext(TodoContext);
+  const { success, info, error: showError } = useNotification();
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
@@ -18,20 +20,31 @@ const HomePage = () => {
   const handleSelectMultiple = () => {
     setSelectMode(true);
     setShowOptionsMenu(false);
+    info('Select mode activated. Tap on tasks to select them.');
   };
   
   // Handle clearing completed tasks
   const handleClearCompleted = () => {
-    deleteCompletedTasks();
+    console.log('Clearing completed tasks...');
+    const completedTasksCount = tasks.filter(task => task.completed).length;
+    console.log(`Found ${completedTasksCount} completed tasks to delete`);
+    
+    if (completedTasksCount === 0) {
+      info('No completed tasks to delete');
+    } else {
+      deleteCompletedTasks();
+      success(`Deleted ${completedTasksCount} completed task${completedTasksCount > 1 ? 's' : ''}`);
+    }
+    
     setShowOptionsMenu(false);
   };
   
   // Handle bulk deletion of selected tasks
   const handleDeleteSelected = () => {
-    // We'll implement this in TodoContext
     if (selectedTasks.length > 0) {
       // Call the context function to delete multiple tasks
-      // deleteMultipleTasks(selectedTasks);
+      deleteMultipleTasks(selectedTasks);
+      success(`Deleted ${selectedTasks.length} task${selectedTasks.length > 1 ? 's' : ''}`);
       setSelectedTasks([]);
       setSelectMode(false);
     }
@@ -110,23 +123,33 @@ const HomePage = () => {
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <button
                       onClick={handleSelectMultiple}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+                      className={`w-full text-left px-4 py-2 text-sm ${selectMode 
+                        ? 'bg-primary-purple text-white hover:bg-primary-purple/90' 
+                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      } flex items-center`}
                       role="menuitem"
+                      disabled={selectMode}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
-                      Select Multiple
+                      {selectMode ? 'Selection Mode Active' : 'Select Multiple'}
                     </button>
                     <button
                       onClick={handleClearCompleted}
                       className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                       role="menuitem"
+                      disabled={tasks.filter(task => task.completed).length === 0}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                       Clear Completed
+                      {tasks.filter(task => task.completed).length > 0 && (
+                        <span className="ml-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-full px-2 py-0.5 text-xs">
+                          {tasks.filter(task => task.completed).length}
+                        </span>
+                      )}
                     </button>
                   </div>
                 </div>

@@ -25,7 +25,7 @@ const Notification = ({ message, type, duration = 3000, onClose }) => {
         : 'bg-blue-500';
 
   return (
-    <div className={`${bgColor} text-white px-4 py-3 rounded shadow-md fixed bottom-4 right-4 z-50 max-w-md`}>
+    <div className={`${bgColor} text-white px-4 py-3 rounded shadow-md fixed bottom-4 right-4 z-50 max-w-md animate-fadeIn`}>
       <div className="flex items-center">
         <span>{message}</span>
         <button 

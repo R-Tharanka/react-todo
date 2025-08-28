@@ -229,9 +229,11 @@ export const TodoProvider = ({ children }) => {
       .map(task => task._id);
       
     if (completedTaskIds.length === 0) {
+      console.log('No completed tasks to delete');
       return; // No completed tasks to delete
     }
     
+    console.log(`Deleting ${completedTaskIds.length} completed tasks`);
     deleteMultipleTasks(completedTaskIds);
   };
   
