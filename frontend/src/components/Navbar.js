@@ -32,10 +32,8 @@ const Navbar = () => {
     }
   }, [location.pathname]);
   
-  // Don't show navbar on login or register pages
-  if (location.pathname === '/login' || location.pathname === '/register') {
-    return null;
-  }
+  // Check if we're on login or register pages
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
   
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -68,19 +66,21 @@ const Navbar = () => {
             </Link>
           </div>
           
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMobileMenu}
-              className="p-2 rounded-md text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card hover:text-primary-purple dark:hover:text-accent focus:outline-none focus:ring-2 focus:ring-primary-purple"
-              aria-label="Toggle menu"
-            >
-              {showMenu ? 
-                <FaTimes className="h-6 w-6" /> : 
-                <FaBars className="h-6 w-6" />
-              }
-            </button>
-          </div>
+          {/* Mobile menu button - Only show on non-auth pages or when user is logged in */}
+          {(!isAuthPage || user) && (
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={toggleMobileMenu}
+                className="p-2 rounded-md text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card hover:text-primary-purple dark:hover:text-accent focus:outline-none focus:ring-2 focus:ring-primary-purple"
+                aria-label="Toggle menu"
+              >
+                {showMenu ? 
+                  <FaTimes className="h-6 w-6" /> : 
+                  <FaBars className="h-6 w-6" />
+                }
+              </button>
+            </div>
+          )}
           
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-4">
@@ -95,7 +95,26 @@ const Navbar = () => {
               }
             </button>
 
-            {user ? (
+            {/* Auth page navigation options */}
+            {isAuthPage ? (
+              <div className="flex items-center space-x-4">
+                {location.pathname === '/login' ? (
+                  <Link 
+                    to="/register" 
+                    className="px-4 py-2 rounded-md bg-primary-purple/20 text-primary-purple hover:bg-primary-purple/30 transition-colors"
+                  >
+                    Register
+                  </Link>
+                ) : (
+                  <Link 
+                    to="/login" 
+                    className="px-4 py-2 rounded-md bg-primary-purple/20 text-primary-purple hover:bg-primary-purple/30 transition-colors"
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
+            ) : user ? (
               <div className="relative">
                 <div 
                   onClick={toggleDropdown} 

@@ -138,7 +138,7 @@ const ProfilePage = () => {
   };
   
   return (
-    <div className="min-h-screen pt-20 pb-12 px-4 bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen pt-20 pb-12 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="bg-white dark:bg-card-bg rounded-xl shadow-lg p-4 md:p-6 mb-8">
           {/* User header with avatar and name */}
