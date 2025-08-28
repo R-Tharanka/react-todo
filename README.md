@@ -1,17 +1,20 @@
 # Todo App
 
-A full-stack Todo App built with React, Node.js, Express, and MongoDB. 
+A full-stack Todo App built with React, Node.js, Express, and MongoDB. This project demonstrates modern front-end and back-end practices, state management, API integration, and responsive design.
 
 ## Features
 
-- **Add, Edit, Delete Tasks**: Full CRUD operations
-- **Task Status Management**: Mark tasks as completed/incomplete
-- **Search & Filter**: Find specific tasks or filter by status
+- **Add, Edit, Delete Tasks**: Full CRUD operations with real-time updates
+- **Task Status Management**: Mark tasks as completed/incomplete with visual feedback
+- **Task Metadata**: Add due dates, priorities, and categories to tasks
+- **Search & Filter**: Find specific tasks or filter by status, priority, or date
+- **Bulk Actions**: Select multiple tasks for batch operations
 - **Drag & Drop**: Reorder tasks with intuitive drag and drop functionality
-- **Dark/Light Mode**: Choose your preferred theme
-- **Persistence**: Tasks persist between browser sessions with local storage backup
-- **Responsive Design**: Works on both desktop and mobile devices
-- **Error Handling & Loading States**: User feedback for all operations
+- **Dark/Light Mode**: Choose your preferred theme with system detection
+- **Persistence**: Tasks persist between browser sessions with database and local storage backup
+- **Responsive Design**: Optimized for desktop, tablet and mobile devices
+- **Error Handling & Loading States**: Comprehensive user feedback for all operations
+- **Productivity Tips**: Carousel of productivity enhancement suggestions
 
 ## Tech Stack
 

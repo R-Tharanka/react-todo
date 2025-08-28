@@ -5,8 +5,18 @@ import DatePicker from './DatePicker';
 import PrioritySelect from './PrioritySelect';
 
 /**
- * TodoItem Component - Renders an individual task with editing capabilities,
- * completion status toggle, and detailed task information.
+ * TodoItem Component
+ * 
+ * Renders an individual task card with:
+ * - Task completion toggle checkbox
+ * - Task text display with completed state indication
+ * - Metadata display (due date, priority, category)
+ * - Edit/Delete actions
+ * - Inline editing capabilities
+ * - Modal for detailed editing
+ * - Selection mode support for bulk actions
+ * 
+ * Handles task validation and updates via TodoContext
  */
 
 // Formats a date string to a user-friendly format (Today, Tomorrow, Yesterday, or short date)

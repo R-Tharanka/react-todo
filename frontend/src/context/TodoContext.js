@@ -1,8 +1,16 @@
+/**
+ * TodoContext.js
+ * 
+ * Central state management for todo operations. 
+ * Handles CRUD operations, filtering, sorting, and task state management.
+ * Communicates with the backend API and provides loading/error states.
+ */
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 import API from '../config/api';
 
+// Create context to be consumed by components needing todo functionality
 export const TodoContext = createContext();
 
 // Configure axios with interceptors for better debugging
@@ -35,17 +43,31 @@ axios.interceptors.response.use(
   }
 );
 
-// Use API.baseURL + /api/tasks
+// API endpoint for tasks
 const API_URL = `${API.baseURL}/api/tasks`;
 
+/**
+ * TodoProvider - Main context provider for todo operations
+ * 
+ * Provides:
+ * - Task state management
+ * - API integration for CRUD operations
+ * - Filtering, searching, and sorting functionality
+ * - Loading and error states
+ */
 export const TodoProvider = ({ children }) => {
+  // Core state
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Filter and search state
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [dueDate, setDueDate] = useState(null);
+  
+  // Get authenticated user from AuthContext
   const { user } = useContext(AuthContext);
 
   // Load tasks when user is authenticated or when filter/sortBy changes
@@ -78,31 +100,40 @@ export const TodoProvider = ({ children }) => {
     }
   }, [tasks, user]);
 
-  // Refetch tasks when filter or sort options change
+  /**
+   * Effect: Refetch tasks when filter or sort options change
+   * Ensures task list stays in sync with user's filter/sort preferences
+   */
   useEffect(() => {
     if (user) {
       fetchTasks();
     }
   }, [filter, sortBy]);
 
-  // Fetch all tasks from the API
+  /**
+   * Fetches tasks from the API with current filter and sort parameters
+   * Updates tasks state with response or sets error state on failure
+   */
   const fetchTasks = async () => {
     if (!user) return;
 
     setLoading(true);
     try {
-      // Include filter and sort parameters if they are set
+      // Build URL with query parameters
       let url = API_URL;
       const params = new URLSearchParams();
 
+      // Add filter parameter (completed, active)
       if (filter && filter !== 'all') {
         params.append('filter', filter);
       }
 
+      // Add sort parameter (newest, oldest, priority, etc)
       if (sortBy) {
         params.append('sort', sortBy);
       }
 
+      // Append query string if parameters exist
       if (params.toString()) {
         url += `?${params.toString()}`;
       }
@@ -118,8 +149,17 @@ export const TodoProvider = ({ children }) => {
     }
   };
 
-  // Add a new task
+  /**
+   * Creates a new task with the provided details
+   * 
+   * @param {string} text - Task description text
+   * @param {Date|null} dueDate - Optional due date for the task
+   * @param {number} priority - Task priority (0: none, 1: low, 2: medium, 3: high)
+   * @param {string} category - Optional task category
+   * @returns {boolean} Success status
+   */
   const addTask = async (text, dueDate = null, priority = 0, category = '') => {
+    // Validate task text
     if (!text || text.trim() === '') {
       setError('Task text cannot be empty!');
       return false;
@@ -127,13 +167,13 @@ export const TodoProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      // Create task data object with all properties
+      // Create task data object with required properties
       const taskData = {
         text,
         completed: false
       };
 
-      // Always include these properties in the request, even if null/empty
+      // Add optional properties - backend expects these fields
       taskData.dueDate = dueDate;
       taskData.priority = priority;
       taskData.category = category;

@@ -1,7 +1,18 @@
+/**
+ * ProductivityTips Component
+ * 
+ * Displays a carousel of productivity tips with:
+ * - Auto-sliding functionality
+ * - Mobile-optimized navigation
+ * - Touch gestures support
+ * - Pause on interaction behavior
+ * - Visual indicators for current slide
+ */
 import React, { useState, useEffect } from 'react';
 import { FaLightbulb, FaClock, FaTrophy, FaBell, FaBrain } from 'react-icons/fa';
 
 const ProductivityTips = () => {
+    // Track which tip is currently displayed
     const [activeSlide, setActiveSlide] = useState(0);
 
     const tips = [
@@ -37,15 +48,24 @@ const ProductivityTips = () => {
         }
     ];
 
-    // Auto-slide functionality with pause on touch/hover
+    /**
+     * Auto-slide functionality with pause on interaction
+     * 
+     * Features:
+     * - Automatically advances slides every 7 seconds
+     * - Pauses when user hovers or touches the component
+     * - Resumes when interaction ends
+     * - Cleans up event listeners on unmount
+     */
     useEffect(() => {
         let isPaused = false;
         const containerRef = document.querySelector('.productivity-tips-container');
 
+        // Event handlers for pausing/resuming auto-slide
         const handlePause = () => { isPaused = true; };
         const handleResume = () => { isPaused = false; };
 
-        // Add event listeners to pause auto-slide on interaction
+        // Register event listeners for mouse and touch interactions
         if (containerRef) {
             containerRef.addEventListener('mouseenter', handlePause);
             containerRef.addEventListener('touchstart', handlePause);
@@ -70,7 +90,13 @@ const ProductivityTips = () => {
         };
     }, [tips.length]);
 
-    // Calculate which tips to show (current + 2 next)
+    /**
+     * Returns the tips to display in the carousel
+     * In desktop view: Shows current tip and next two tips
+     * In mobile view: Shows only current tip
+     * 
+     * @returns {Array} Array of visible tip objects
+     */
     const getVisibleTips = () => {
         const visibleTips = [];
         for (let i = 0; i < 3; i++) {
@@ -80,23 +106,29 @@ const ProductivityTips = () => {
         return visibleTips;
     };
 
-    // Add simple swipe functionality
+    /**
+     * Touch swipe detection for mobile devices
+     * Allows users to navigate tips by swiping left/right
+     */
     useEffect(() => {
         const container = document.querySelector('.productivity-tips-container');
         let touchStartX = 0;
         let touchEndX = 0;
 
+        // Capture initial touch position
         function handleTouchStart(e) {
             touchStartX = e.changedTouches[0].screenX;
         }
 
+        // Capture final touch position and process swipe
         function handleTouchEnd(e) {
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
         }
 
+        // Determine swipe direction and change slide accordingly
         function handleSwipe() {
-            const minSwipeDistance = 50;
+            const minSwipeDistance = 50; // Minimum distance to register a swipe
             // Left swipe (next slide)
             if (touchStartX - touchEndX > minSwipeDistance) {
                 setActiveSlide((activeSlide + 1) % tips.length);

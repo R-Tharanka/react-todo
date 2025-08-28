@@ -1,3 +1,14 @@
+/**
+ * TodoList Component
+ * 
+ * Renders the list of tasks with:
+ * - Drag and drop reordering functionality
+ * - Task selection for bulk actions
+ * - Empty state handling
+ * - Task filtering based on active filters
+ * 
+ * Uses react-beautiful-dnd for drag-drop functionality
+ */
 import React, { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { AuthContext } from '../context/AuthContext';
@@ -6,24 +17,37 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaEye, FaTasks } from 'react-icons/fa';
 
 const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = () => { } }) => {
+  // Get task-related functions and user context
   const { getFilteredTasks, reorderTasks } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
+  
+  // Get filtered tasks based on current filter/search criteria
   const filteredTasks = getFilteredTasks();
 
-  // Toggle task selection
+  /**
+   * Handles toggling task selection in multi-select mode
+   * Adds or removes task IDs from the selectedTasks array
+   * 
+   * @param {string} taskId - ID of the task to toggle selection
+   */
   const toggleTaskSelection = (taskId) => {
-    console.log(`Toggling selection for task ID: ${taskId}`);
     if (selectedTasks.includes(taskId)) {
-      console.log(`Task ${taskId} is already selected, removing from selection`);
+      // Remove task from selection if already selected
       setSelectedTasks(prevSelected => prevSelected.filter(id => id !== taskId));
     } else {
-      console.log(`Adding task ${taskId} to selection`);
+      // Add task to selection if not already selected
       setSelectedTasks(prevSelected => [...prevSelected, taskId]);
     }
   };
 
+  /**
+   * Handles the end of a drag operation
+   * Updates task order in state and persists via API
+   * 
+   * @param {Object} result - Drag result from react-beautiful-dnd
+   */
   const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
+    if (!result.destination) return; // Dropped outside droppable area
 
     // If dropped in the same position
     if (

@@ -1,3 +1,14 @@
+/**
+ * HomePage Component
+ * 
+ * Main task management page that includes:
+ * - Hero section with app title and task input
+ * - Task listing with filtering, searching and sorting
+ * - Task management controls (selection mode, bulk actions)
+ * - Productivity tips section
+ * 
+ * Handles UI state for options menu, selection mode, and scroll hints
+ */
 import React, { useContext, useEffect, useState } from 'react';
 import TodoList from '../components/TodoList';
 import SearchBox from '../components/SearchBox';
@@ -9,24 +20,32 @@ import { useNotification } from '../context/NotificationContext';
 import { FaSpinner, FaClipboardList, FaTrash, FaTimes } from 'react-icons/fa';
 
 const HomePage = () => {
+  // Get task-related functions and state from context
   const { loading, error, tasks, deleteCompletedTasks, deleteMultipleTasks } = useContext(TodoContext);
   const { success, info, error: showError } = useNotification();
+  
+  // UI state management
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
 
-  // Check if scroll hint should be shown
-  // Handle option to select multiple tasks
+  /**
+   * Activates selection mode to allow selecting multiple tasks
+   * Displays notification to guide the user
+   */
   const handleSelectMultiple = () => {
-    console.log('handleSelectMultiple called');
     setSelectMode(true);
     setShowOptionsMenu(false);
     success('Selection Mode Activated! Click on the checkboxes on the left side to select tasks.');
-    console.log('Select mode should now be:', true);
   };
 
-  // Handle clearing completed tasks
+  /**
+   * Deletes all completed tasks
+   * Prevents default event behavior and shows appropriate notifications
+   * 
+   * @param {Event} e - Optional event object
+   */
   const handleClearCompleted = async (e) => {
     // If event is provided, prevent default behavior
     if (e) {
@@ -34,9 +53,7 @@ const HomePage = () => {
       e.stopPropagation();
     }
 
-    console.log('Clearing completed tasks...');
     const completedTasksCount = tasks.filter(task => task.completed).length;
-    console.log(`Found ${completedTasksCount} completed tasks to delete`);
 
     if (completedTasksCount === 0) {
       info('No completed tasks to delete');

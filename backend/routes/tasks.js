@@ -1,24 +1,44 @@
+/**
+ * Task Routes
+ * 
+ * Handles all task-related API endpoints:
+ * - CRUD operations for tasks
+ * - Filtering by completion status, due date, etc.
+ * - Sorting by various criteria
+ * - Batch operations (bulk delete, etc.)
+ * 
+ * All routes require authentication
+ */
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
 const { protect } = require('../middleware/authMiddleware');
 
-// Apply auth middleware to all routes
+// Apply auth middleware to all routes to ensure only authenticated users can access tasks
 router.use(protect);
 
-// GET all tasks for logged in user with filtering and sorting
+/**
+ * GET /api/tasks
+ * Retrieves tasks for the authenticated user with optional filtering and sorting
+ * 
+ * Query Parameters:
+ * - filter: completed, active, today, upcoming, overdue
+ * - sort: newest, oldest, dueDate, priority, alphabetical
+ * 
+ * @returns {Array} List of tasks matching criteria
+ */
 router.get('/', async (req, res) => {
   try {
     const { filter, sort } = req.query;
-    let query = { user: req.user._id };
+    let query = { user: req.user._id }; // Base query filters by current user
     let sortOptions = { createdAt: -1 }; // Default sort by newest
 
-    // Apply filters
+    // Apply filters based on query parameters
     if (filter) {
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0); // Start of today
       const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setDate(tomorrow.getDate() + 1); // Start of tomorrow
 
       switch (filter) {
         case 'completed':

@@ -1,3 +1,12 @@
+/**
+ * Todo App Backend Server
+ * 
+ * Express server with MongoDB integration that provides:
+ * - RESTful API endpoints for task management
+ * - User authentication with JWT
+ * - CORS configuration for frontend communication
+ * - Error handling middleware
+ */
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -6,9 +15,13 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-// Configure CORS to allow requests from the frontend
-// Parse CORS_ORIGIN from env var - can be comma-separated list or single origin
+/**
+ * Middleware Configuration
+ * 
+ * CORS: Configure origins that can access the API
+ * - Supports multiple origins via comma-separated env variable
+ * - Enables credentials for auth functionality
+ */
 const corsOrigins = process.env.CORS_ORIGIN ?
   process.env.CORS_ORIGIN.split(',') :
   ['http://localhost:3000'];

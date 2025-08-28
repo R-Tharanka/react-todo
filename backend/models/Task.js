@@ -1,6 +1,16 @@
+/**
+ * Task Model
+ * 
+ * Defines the schema for task objects with:
+ * - Basic task properties (text, completion status)
+ * - Metadata fields (due date, priority, category)
+ * - User relationship for ownership
+ * - Creation and update timestamps
+ */
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
+  // Core task data
   text: {
     type: String,
     required: [true, 'Task text is required'],
@@ -10,16 +20,21 @@ const TaskSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  
+  // Relationship to user owner
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
+  
+  // Timestamps
   createdAt: {
     type: Date,
     default: Date.now
   },
-  // New fields for filtering and sorting
+  
+  // Task metadata fields
   dueDate: {
     type: Date,
     required: false
