@@ -13,6 +13,7 @@ import ProfilePage from './pages/ProfilePage';
 import Navbar from './components/Navbar';
 import ThemeToggle from './components/ThemeToggle';
 import PrivateRoute from './components/PrivateRoute';
+import Footer from './components/Footer';
 
 function App() {
     const { theme } = useContext(ThemeContext);
@@ -36,6 +37,7 @@ function App() {
                         />
                     </Routes>
                 </div>
+                <Footer />
             </div>
         </NotificationProvider>
     );
