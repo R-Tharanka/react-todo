@@ -2,6 +2,10 @@
 
 A full-stack Todo App built with React, Node.js, Express, and MongoDB. This project demonstrates modern front-end and back-end practices, state management, API integration, and responsive design.
 
+## Live Demo
+
+**[View Live Demo](https://taskmanager-seven-beta.vercel.app/)**
+
 ## Features
 
 - **Add, Edit, Delete Tasks**: Full CRUD operations with real-time updates
