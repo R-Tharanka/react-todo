@@ -18,7 +18,7 @@ const Footer = () => {
   return (
     <footer className={`${
       isDark ? 'bg-dark-bg text-gray-300' : 'bg-white text-gray-700'
-    } py-8 px-6 mt-auto transition-all duration-200 border-t ${
+    } py-8 px-6 mt-8 transition-all duration-200 border-t ${
       isDark ? 'border-gray-700' : 'border-gray-200'
     } backdrop-blur-sm ${
       isDark ? 'bg-dark-bg/90' : 'bg-white/90'
