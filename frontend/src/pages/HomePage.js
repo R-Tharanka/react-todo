@@ -3,6 +3,7 @@ import TodoList from '../components/TodoList';
 import SearchBox from '../components/SearchBox';
 import FilterButtons from '../components/FilterButtons';
 import Hero from '../components/Hero';
+import ProductivityTips from '../components/ProductivityTips';
 import { TodoContext } from '../context/TodoContext';
 import { useNotification } from '../context/NotificationContext';
 import { FaSpinner, FaClipboardList, FaTrash, FaTimes } from 'react-icons/fa';
@@ -129,7 +130,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-16 pb-12 px-4 sm:px-6">
       <Hero />
-      <div className="max-w-4xl mx-auto bg-white dark:bg-card-bg rounded-xl shadow-xl p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto mb-16 bg-white dark:bg-card-bg rounded-xl shadow-xl p-4 sm:p-6 md:p-8">
         <div className="mb-4 sm:mb-6">
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white flex items-center">
@@ -254,6 +255,11 @@ const HomePage = () => {
             </div>
           )}
         </div>
+      </div>
+      
+      {/* Productivity Tips Section - Separate from task section */}
+      <div className="max-w-4xl mx-auto mt-20 mb-4 bg-transparent backdrop-blur-sm p-4 sm:p-6 md:p-8">
+        <ProductivityTips />
       </div>
     </div>
   );
