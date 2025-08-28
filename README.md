@@ -196,4 +196,4 @@ Authorization: Bearer <token>
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/R-Tharanka/react-todo/blob/0e531dc9e6d604f76ed78f924ccb77549848be92/LICENSE) file for details
