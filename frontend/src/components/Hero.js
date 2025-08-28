@@ -7,7 +7,7 @@ import { useNotification } from '../context/NotificationContext';
 import { FaCheckCircle, FaHourglassHalf, FaCalendar, FaFlag } from 'react-icons/fa';
 
 const Hero = () => {
-  const { tasks, addTask, error } = useContext(TodoContext);
+  const { tasks, addTask } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
   const { success, error: showError, warning } = useNotification();
   const [newTaskText, setNewTaskText] = useState('');
@@ -40,7 +40,7 @@ const Hero = () => {
     };
   }, [taskInputRef, newTaskText]);
 
-  // Convert string priority to number
+  // Convert string priority to number 
   const getPriorityValue = (priorityStr) => {
     switch (priorityStr) {
       case 'high': return 3;

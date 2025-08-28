@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { ThemeContext } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
 
-// Pages
+// Pages 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
