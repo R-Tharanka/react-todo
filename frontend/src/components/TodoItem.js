@@ -78,6 +78,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   const [editDueDate, setEditDueDate] = useState(task.dueDate || null);
   const [editPriority, setEditPriority] = useState(typeof task.priority !== 'undefined' ? task.priority : 0);
   const [editCategory, setEditCategory] = useState(task.category || '');
+  const [validationError, setValidationError] = useState('');
   
   // Get task management functions from context
   const { toggleComplete, updateTask, deleteTask } = useContext(TodoContext);
@@ -116,11 +117,32 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
     setEditCategory(task.category || '');
   };
 
+  // Validate task input
+  const validateTaskInput = () => {
+    // Clear previous validation errors
+    setValidationError('');
+    
+    // Check for empty task text
+    if (editText.trim() === '') {
+      setValidationError('Task text cannot be empty');
+      return false;
+    }
+    
+    // Check for maximum length (e.g., 200 characters)
+    if (editText.length > 200) {
+      setValidationError('Task text is too long (maximum 200 characters)');
+      return false;
+    }
+    
+    return true;
+  };
+
   // Save task changes (text and metadata)
   const handleSave = () => {
-    if (editText.trim() !== '') {
+    if (validateTaskInput()) {
       updateTask(task._id, editText, editDueDate, editPriority, editCategory);
       setIsEditing(false);
+      setValidationError('');
     }
   };
 
@@ -131,6 +153,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
     setEditDueDate(task.dueDate || null);
     setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
     setEditCategory(task.category || '');
+    setValidationError('');
   };
 
   return (
@@ -160,14 +183,24 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
       {/* Task editing form or display */}
       {isEditing ? (
         <div className="flex-grow flex flex-col space-y-3">
-          <input
-            type="text"
-            className="w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border border-purple-300 dark:border-purple-600 focus:ring-2 focus:ring-white focus:border-transparent focus:outline-none"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            autoFocus
-            placeholder="Task text"
-          />
+          <div>
+            <input
+              type="text"
+              className={`w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border ${
+                validationError ? 'border-red-500 dark:border-red-500' : 'border-purple-300 dark:border-purple-600'
+              } focus:ring-2 focus:ring-white focus:border-transparent focus:outline-none`}
+              value={editText}
+              onChange={(e) => {
+                setEditText(e.target.value);
+                if (validationError) validateTaskInput();
+              }}
+              autoFocus
+              placeholder="Task text"
+            />
+            {validationError && (
+              <p className="mt-1 text-xs text-red-500 dark:text-red-400">{validationError}</p>
+            )}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
@@ -377,9 +410,18 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               </div>
             </div>
             
+            {validationError && (
+              <div className="mt-4 p-2 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded text-red-700 dark:text-red-300 text-sm">
+                <p>{validationError}</p>
+              </div>
+            )}
+            
             <div className="mt-6 flex justify-end space-x-3">
               <button
-                onClick={() => setShowDetailsModal(false)}
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setValidationError('');
+                }}
                 className="px-4 py-2 bg-purple-200 dark:bg-purple-800 text-purple-900 dark:text-purple-100 rounded-md hover:bg-purple-300 dark:hover:bg-purple-700"
               >
                 Cancel
