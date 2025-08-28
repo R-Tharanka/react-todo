@@ -20,18 +20,18 @@ router.post('/register', async (req, res) => {
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
-    
+
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
-    
+
     // Create new user
     const user = await User.create({
       name,
       email,
       password
     });
-    
+
     if (user) {
       res.status(201).json({
         _id: user._id,
@@ -54,10 +54,10 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     // Find user by email
     const user = await User.findOne({ email });
-    
+
     // Check if user exists and password matches
     if (user && (await user.matchPassword(password))) {
       res.json({
@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
 router.get('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
-    
+
     if (user) {
       res.json(user);
     } else {
@@ -98,18 +98,18 @@ router.get('/profile', protect, async (req, res) => {
 router.put('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    
+
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.avatar = req.body.avatar || user.avatar;
-      
+
       if (req.body.password) {
         user.password = req.body.password;
       }
-      
+
       const updatedUser = await user.save();
-      
+
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,

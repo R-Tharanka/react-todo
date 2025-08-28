@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
-import { 
-  FaUser, FaSignOutAlt, FaUserEdit, FaClipboardList, 
+import {
+  FaUser, FaSignOutAlt, FaUserEdit, FaClipboardList,
   FaBars, FaTimes, FaSun, FaMoon, FaTasks
 } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  
+
   // Define scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -24,36 +24,35 @@ const Navbar = () => {
         setScrolled(false);
       }
     };
-    
+
     // Only add the event listener if we're not on login/register pages
     if (location.pathname !== '/login' && location.pathname !== '/register') {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     }
   }, [location.pathname]);
-  
+
   // Check if we're on login or register pages
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
-  
+
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-  
+
   const toggleMobileMenu = () => {
     setShowMenu(!showMenu);
   };
-  
+
   const handleLogout = () => {
     logout();
     setShowDropdown(false);
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
-      scrolled 
-        ? 'bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-lg' 
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${scrolled
+        ? 'bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-lg'
         : 'bg-white/60 dark:bg-dark-bg/60 backdrop-blur-sm'
-    }`}>
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -65,7 +64,7 @@ const Navbar = () => {
               </h2>
             </Link>
           </div>
-          
+
           {/* Mobile menu button - Only show on non-auth pages or when user is logged in */}
           {(!isAuthPage || user) && (
             <div className="md:hidden flex items-center">
@@ -74,23 +73,23 @@ const Navbar = () => {
                 className="p-2 rounded-md text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card hover:text-primary-purple dark:hover:text-accent focus:outline-none focus:ring-2 focus:ring-primary-purple"
                 aria-label="Toggle menu"
               >
-                {showMenu ? 
-                  <FaTimes className="h-6 w-6" /> : 
+                {showMenu ?
+                  <FaTimes className="h-6 w-6" /> :
                   <FaBars className="h-6 w-6" />
                 }
               </button>
             </div>
           )}
-          
+
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-4">
-            <button 
+            <button
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-purple dark:hover:text-accent transition-all focus:outline-none focus:ring-2 focus:ring-primary-purple"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? 
-                <FaSun className="h-5 w-5 text-yellow-400" /> : 
+              {theme === 'dark' ?
+                <FaSun className="h-5 w-5 text-yellow-400" /> :
                 <FaMoon className="h-5 w-5 text-primary-purple" />
               }
             </button>
@@ -99,15 +98,15 @@ const Navbar = () => {
             {isAuthPage ? (
               <div className="flex items-center space-x-4">
                 {location.pathname === '/login' ? (
-                  <Link 
-                    to="/register" 
+                  <Link
+                    to="/register"
                     className="px-4 py-2 rounded-md bg-primary-purple/20 text-primary-purple hover:bg-primary-purple/30 transition-colors"
                   >
                     Register
                   </Link>
                 ) : (
-                  <Link 
-                    to="/login" 
+                  <Link
+                    to="/login"
                     className="px-4 py-2 rounded-md bg-primary-purple/20 text-primary-purple hover:bg-primary-purple/30 transition-colors"
                   >
                     Login
@@ -116,8 +115,8 @@ const Navbar = () => {
               </div>
             ) : user ? (
               <div className="relative">
-                <div 
-                  onClick={toggleDropdown} 
+                <div
+                  onClick={toggleDropdown}
                   className="flex items-center cursor-pointer space-x-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   <span className="mr-2 text-gray-800 dark:text-gray-200 font-medium">{user.name}</span>
@@ -129,17 +128,17 @@ const Navbar = () => {
                     )}
                   </div>
                 </div>
-                
+
                 {showDropdown && (
                   <div className="absolute right-0 mt-2 w-48 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md border border-gray-200/70 dark:border-gray-700/70 rounded-lg shadow-lg py-1 z-10 animate-fadeIn">
-                    <Link 
-                      to="/profile" 
+                    <Link
+                      to="/profile"
                       onClick={() => setShowDropdown(false)}
                       className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary-purple hover:text-white dark:hover:text-white transition-colors"
                     >
                       <FaUserEdit className="mr-2" /> Profile
                     </Link>
-                    <button 
+                    <button
                       onClick={handleLogout}
                       className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary-purple hover:text-white dark:hover:text-white transition-colors"
                     >
@@ -167,7 +166,7 @@ const Navbar = () => {
         <div className="px-4 py-3 space-y-2">
           {/* Theme toggle for mobile */}
           <div className="flex justify-center py-3 border-b border-gray-200 dark:border-gray-700">
-            <button 
+            <button
               onClick={toggleTheme}
               className="flex items-center px-4 py-2 rounded-md text-gray-700 dark:text-white hover:bg-primary-purple hover:text-white transition-colors"
               aria-label="Toggle theme"
@@ -179,7 +178,7 @@ const Navbar = () => {
               )}
             </button>
           </div>
-          
+
           {/* User info for mobile */}
           {user ? (
             <div className="pt-3 pb-3 border-t border-gray-200 dark:border-gray-700">
@@ -199,8 +198,8 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="mt-3 space-y-1 px-2">
-                <Link 
-                  to="/profile" 
+                <Link
+                  to="/profile"
                   onClick={() => setShowMenu(false)}
                   className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-primary-purple hover:text-white transition-colors"
                 >
@@ -208,7 +207,7 @@ const Navbar = () => {
                     <FaUserEdit className="mr-2" /> Profile
                   </div>
                 </Link>
-                <button 
+                <button
                   onClick={() => {
                     handleLogout();
                     setShowMenu(false);
@@ -224,15 +223,15 @@ const Navbar = () => {
           ) : (
             <div className="pt-3 pb-3 border-t border-gray-200 dark:border-gray-700">
               <div className="flex flex-col space-y-2 px-3">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   onClick={() => setShowMenu(false)}
                   className="w-full text-center px-4 py-2 rounded-md bg-gradient-to-r from-primary-purple to-accent text-white hover:opacity-90 transition-colors"
                 >
                   Login
                 </Link>
-                <Link 
-                  to="/register" 
+                <Link
+                  to="/register"
                   onClick={() => setShowMenu(false)}
                   className="w-full text-center px-4 py-2 rounded-md border border-primary-purple text-primary-purple dark:text-white hover:bg-primary-purple hover:text-white transition-colors"
                 >

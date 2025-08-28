@@ -25,9 +25,9 @@ export const NotificationProvider = ({ children }) => {
   const info = (message) => showNotification(message, 'info');
 
   return (
-    <NotificationContext.Provider 
-      value={{ 
-        showNotification, 
+    <NotificationContext.Provider
+      value={{
+        showNotification,
         removeNotification,
         success,
         error,
@@ -38,7 +38,7 @@ export const NotificationProvider = ({ children }) => {
       {children}
       <div className="notification-container">
         {notifications.map(({ id, message, type }) => (
-          <Notification 
+          <Notification
             key={id}
             message={message}
             type={type}

@@ -15,7 +15,7 @@ const HomePage = () => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  
+
   // Check if scroll hint should be shown
   // Handle option to select multiple tasks
   const handleSelectMultiple = () => {
@@ -25,7 +25,7 @@ const HomePage = () => {
     success('Selection Mode Activated! Click on the checkboxes on the left side to select tasks.');
     console.log('Select mode should now be:', true);
   };
-  
+
   // Handle clearing completed tasks
   const handleClearCompleted = async (e) => {
     // If event is provided, prevent default behavior
@@ -33,11 +33,11 @@ const HomePage = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    
+
     console.log('Clearing completed tasks...');
     const completedTasksCount = tasks.filter(task => task.completed).length;
     console.log(`Found ${completedTasksCount} completed tasks to delete`);
-    
+
     if (completedTasksCount === 0) {
       info('No completed tasks to delete');
     } else {
@@ -49,15 +49,15 @@ const HomePage = () => {
         showError('Failed to delete completed tasks');
       }
     }
-    
+
     setShowOptionsMenu(false);
   };
-  
+
   // Handle bulk deletion of selected tasks
   const handleDeleteSelected = async () => {
     console.log('Delete selected tasks button clicked');
     console.log('Selected tasks IDs:', selectedTasks);
-    
+
     if (selectedTasks.length > 0) {
       try {
         // Call the context function to delete multiple tasks
@@ -73,26 +73,26 @@ const HomePage = () => {
       info('No tasks selected for deletion');
     }
   };
-  
+
   // Handle exiting select mode
   const handleCancelSelectMode = () => {
     setSelectMode(false);
     setSelectedTasks([]);
   };
-  
+
   // Close options menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Add logging to debug click events
       console.log('Click detected:', event.target);
       console.log('Is .options-menu element?', !!event.target.closest('.options-menu'));
-      
+
       if (showOptionsMenu && !event.target.closest('.options-menu')) {
         console.log('Closing menu due to outside click');
         setShowOptionsMenu(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -108,17 +108,17 @@ const HomePage = () => {
           setShowScrollHint(container.scrollHeight > container.clientHeight);
         }
       };
-      
+
       // Initial check
       checkScrollNeeded();
-      
+
       // Re-check when tasks change
       const observer = new MutationObserver(checkScrollNeeded);
       const container = document.getElementById('task-scroll-container');
       if (container) {
         observer.observe(container, { childList: true, subtree: true });
       }
-      
+
       return () => {
         if (observer) {
           observer.disconnect();
@@ -126,7 +126,7 @@ const HomePage = () => {
       };
     }
   }, [loading, tasks]);
-  
+
   return (
     <div className="min-h-screen pt-16 pb-12 px-4 sm:px-6">
       <Hero />
@@ -138,8 +138,8 @@ const HomePage = () => {
               Your Tasks
             </h2>
             <div className="relative">
-              <button 
-                onClick={() => setShowOptionsMenu(!showOptionsMenu)} 
+              <button
+                onClick={() => setShowOptionsMenu(!showOptionsMenu)}
                 className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300 focus:outline-none options-menu"
                 aria-label="More options"
               >
@@ -155,10 +155,10 @@ const HomePage = () => {
                         e.stopPropagation(); // Prevent event from bubbling up
                         handleSelectMultiple();
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm ${selectMode 
-                        ? 'bg-primary-purple text-white hover:bg-primary-purple/90' 
+                      className={`w-full text-left px-4 py-2 text-sm ${selectMode
+                        ? 'bg-primary-purple text-white hover:bg-primary-purple/90'
                         : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      } flex items-center`}
+                        } flex items-center`}
                       role="menuitem"
                       disabled={selectMode}
                     >
@@ -196,7 +196,7 @@ const HomePage = () => {
             <FilterButtons />
           </div>
         </div>
-        
+
         <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 relative">
           {loading ? (
             <div className="flex justify-center items-center my-16">
@@ -229,13 +229,13 @@ const HomePage = () => {
                   </div>
                 </div>
               )}
-              
-              <div 
+
+              <div
                 className={`${selectMode ? 'max-h-[30rem] sm:max-h-[31rem] md:max-h-[33rem]' : 'max-h-[33rem] sm:max-h-[34rem] md:max-h-[36rem]'} min-h-[10rem] overflow-y-auto overflow-x-hidden px-2 custom-scrollbar task-container`}
                 id="task-scroll-container"
                 style={{ willChange: 'transform', overflowX: 'clip' }}
               >
-                <TodoList 
+                <TodoList
                   selectMode={selectMode}
                   selectedTasks={selectedTasks}
                   setSelectedTasks={setSelectedTasks}
@@ -249,7 +249,7 @@ const HomePage = () => {
               </div>
             </>
           )}
-          
+
           {error && (
             <div className="mt-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-md">
               {error}
@@ -257,7 +257,7 @@ const HomePage = () => {
           )}
         </div>
       </div>
-      
+
       {/* Productivity Tips Section - Separate from task section */}
       <div className="max-w-4xl mx-auto mt-12 sm:mt-16 md:mt-20 mb-4 p-4 sm:p-6 md:p-8">
         <ProductivityTips />

@@ -14,13 +14,13 @@ const formatDueDate = (dateString) => {
   const date = new Date(dateString);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  
+
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
-  
+
   if (date.toDateString() === today.toDateString()) {
     return 'Today';
   } else if (date.toDateString() === tomorrow.toDateString()) {
@@ -51,7 +51,7 @@ const isToday = (task) => {
 };
 
 const getPriorityLabel = (priority) => {
-  switch(priority) {
+  switch (priority) {
     case 3: return 'High';
     case 2: return 'Medium';
     case 1: return 'Low';
@@ -61,7 +61,7 @@ const getPriorityLabel = (priority) => {
 
 // Returns the color class for the priority dot indicator
 const getPriorityColor = (priority) => {
-  switch(priority) {
+  switch (priority) {
     case 3: return 'bg-red-500';
     case 2: return 'bg-yellow-500';
     case 1: return 'bg-blue-500';
@@ -79,10 +79,10 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   const [editPriority, setEditPriority] = useState(typeof task.priority !== 'undefined' ? task.priority : 0);
   const [editCategory, setEditCategory] = useState(task.category || '');
   const [validationError, setValidationError] = useState('');
-  
+
   // Get task management functions from context
   const { toggleComplete, updateTask, deleteTask } = useContext(TodoContext);
-  
+
   // Reference for modal to handle outside clicks
   const modalRef = useRef(null);
 
@@ -108,7 +108,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
     setEditPriority(typeof task.priority !== 'undefined' ? task.priority : 0);
     setEditCategory(task.category || '');
   };
-  
+
   // Open details modal for metadata editing
   const openDetailsModal = () => {
     setShowDetailsModal(true);
@@ -121,19 +121,19 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   const validateTaskInput = () => {
     // Clear previous validation errors
     setValidationError('');
-    
+
     // Check for empty task text
     if (editText.trim() === '') {
       setValidationError('Task text cannot be empty');
       return false;
     }
-    
+
     // Check for maximum length (e.g., 200 characters)
     if (editText.length > 200) {
       setValidationError('Task text is too long (maximum 200 characters)');
       return false;
     }
-    
+
     return true;
   };
 
@@ -157,19 +157,16 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   };
 
   return (
-    <li className={`bg-primary-purple dark:bg-purple-800 border-2 border-purple-300 dark:border-purple-700 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-lg hover:translate-y-[-1px] hover:border-white dark:hover:border-white transform duration-200 ease-in-out group relative ${
-      selectMode ? 'pl-14' : ''
-    } ${
-      isSelected ? 'ring-2 ring-white bg-purple-700 dark:bg-purple-700' : ''
-    }`}>
+    <li className={`bg-primary-purple dark:bg-purple-800 border-2 border-purple-300 dark:border-purple-700 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-lg hover:translate-y-[-1px] hover:border-white dark:hover:border-white transform duration-200 ease-in-out group relative ${selectMode ? 'pl-14' : ''
+      } ${isSelected ? 'ring-2 ring-white bg-purple-700 dark:bg-purple-700' : ''
+      }`}>
       {/* Task completion checkbox */}
       <div className="flex flex-col items-center mr-3">
-        <div 
-          className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full cursor-pointer transition-colors mt-0.5 sm:mt-0 ${
-            task.completed 
-              ? 'bg-green-500 border-2 border-green-500' 
+        <div
+          className={`h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full cursor-pointer transition-colors mt-0.5 sm:mt-0 ${task.completed
+              ? 'bg-green-500 border-2 border-green-500'
               : 'border-2 border-white hover:border-green-300 dark:border-purple-300 dark:hover:border-green-300'
-          }`}
+            }`}
           onClick={() => toggleComplete(task._id)}
           role="checkbox"
           aria-checked={task.completed}
@@ -186,9 +183,8 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           <div>
             <input
               type="text"
-              className={`w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border ${
-                validationError ? 'border-red-500 dark:border-red-500' : 'border-purple-300 dark:border-purple-600'
-              } focus:ring-2 focus:ring-white focus:border-transparent focus:outline-none`}
+              className={`w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-3 py-2 rounded border ${validationError ? 'border-red-500 dark:border-red-500' : 'border-purple-300 dark:border-purple-600'
+                } focus:ring-2 focus:ring-white focus:border-transparent focus:outline-none`}
               value={editText}
               onChange={(e) => {
                 setEditText(e.target.value);
@@ -201,16 +197,16 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
               <p className="mt-1 text-xs text-red-500 dark:text-red-400">{validationError}</p>
             )}
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Due Date</label>
-              <DatePicker 
+              <DatePicker
                 selectedDate={editDueDate}
                 onDateChange={setEditDueDate}
               />
             </div>
-            
+
             <div>
               <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Priority</label>
               <PrioritySelect
@@ -218,7 +214,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
                 onPriorityChange={setEditPriority}
               />
             </div>
-            
+
             <div className="md:col-span-2">
               <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Category</label>
               <div className="relative">
@@ -247,10 +243,9 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
         </div>
       ) : (
         <div className="flex-grow">
-          <p 
-            className={`text-white dark:text-white ${
-              task.completed ? 'line-through text-purple-200 dark:text-purple-300' : ''
-            } hover:text-purple-100 dark:hover:text-purple-100 transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
+          <p
+            className={`text-white dark:text-white ${task.completed ? 'line-through text-purple-200 dark:text-purple-300' : ''
+              } hover:text-purple-100 dark:hover:text-purple-100 transition-colors text-sm sm:text-base leading-tight sm:leading-normal line-clamp-2 sm:line-clamp-none`}
             tabIndex={0}
           >
             {task.text}
@@ -259,11 +254,10 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           <div className="mt-1 text-xs flex items-center flex-wrap gap-1.5 sm:gap-2">
             {/* Due date badge with conditional styling based on status */}
             {task.dueDate && (
-              <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full transform transition-all duration-200 hover:scale-105 hover:shadow-sm text-[10px] sm:text-xs ${
-                isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800' : 
-                isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800' : 
-                'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
-              }`}>
+              <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full transform transition-all duration-200 hover:scale-105 hover:shadow-sm text-[10px] sm:text-xs ${isOverdue(task) ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800' :
+                  isToday(task) ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-800' :
+                    'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800'
+                }`}>
                 <FaCalendarAlt className="inline mr-0.5 sm:mr-1 text-[8px] sm:text-xs" /> {formatDueDate(task.dueDate)}
               </span>
             )}
@@ -290,8 +284,8 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           <>
             {/* Save button for editing mode */}
             <div className="relative group/tooltip">
-              <button 
-                onClick={handleSave} 
+              <button
+                onClick={handleSave}
                 aria-label="Save"
                 className="p-1.5 sm:p-2 rounded-full hover:bg-green-400 dark:hover:bg-green-700 text-white dark:text-white hover:text-green-100 dark:hover:text-green-200 transition-colors"
               >
@@ -302,11 +296,11 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
                 Save changes
               </div>
             </div>
-            
+
             {/* Cancel button for editing mode */}
             <div className="relative group/tooltip">
-              <button 
-                onClick={handleCancel} 
+              <button
+                onClick={handleCancel}
                 aria-label="Cancel"
                 className="p-1.5 sm:p-2 rounded-full hover:bg-red-400 dark:hover:bg-red-700 text-white dark:text-white hover:text-red-100 dark:hover:text-red-200 transition-colors"
               >
@@ -322,8 +316,8 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           <>
             {/* Edit button for all task properties */}
             <div className="relative group/tooltip">
-              <button 
-                onClick={handleEdit} 
+              <button
+                onClick={handleEdit}
                 aria-label="Edit Task"
                 className="p-1.5 sm:p-2 rounded-full hover:bg-blue-400 dark:hover:bg-blue-700 text-white dark:text-white hover:text-blue-100 dark:hover:text-blue-200 transition-colors"
               >
@@ -334,11 +328,11 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
                 Edit task
               </div>
             </div>
-            
+
             {/* Delete button */}
             <div className="relative group/tooltip">
-              <button 
-                onClick={() => deleteTask(task._id)} 
+              <button
+                onClick={() => deleteTask(task._id)}
                 aria-label="Delete"
                 className="p-1.5 sm:p-2 rounded-full hover:bg-red-400 dark:hover:bg-red-700 text-white dark:text-white hover:text-red-100 dark:hover:text-red-200 transition-colors"
               >
@@ -352,7 +346,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
           </>
         )}
       </div>
-      
+
       {/* Task details modal for editing metadata */}
       {showDetailsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -360,18 +354,18 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
             <h3 className="text-lg font-medium text-purple-900 dark:text-white mb-4">
               Task Details
             </h3>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Due Date
                 </label>
-                <DatePicker 
+                <DatePicker
                   selectedDate={editDueDate}
                   onDateChange={setEditDueDate}
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Priority
@@ -381,7 +375,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
                   onPriorityChange={setEditPriority}
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Category
@@ -409,13 +403,13 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
                 </div>
               </div>
             </div>
-            
+
             {validationError && (
               <div className="mt-4 p-2 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded text-red-700 dark:text-red-300 text-sm">
                 <p>{validationError}</p>
               </div>
             )}
-            
+
             <div className="mt-6 flex justify-end space-x-3">
               <button
                 onClick={() => {

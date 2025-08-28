@@ -128,7 +128,7 @@
     overflow-x: hidden;
     /* Ensure no horizontal scroll */
   }
-  
+
   /* Firefox scrollbar for dark mode */
   .dark .custom-scrollbar {
     scrollbar-color: rgba(90, 30, 160, 0.95) rgba(20, 20, 30, 0.7);

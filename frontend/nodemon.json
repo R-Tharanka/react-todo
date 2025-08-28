@@ -1,6 +1,11 @@
 {
-  "watch": ["src"],
+  "watch": [
+    "src"
+  ],
   "ext": "js,jsx,ts,tsx,json,css,scss,html",
-  "ignore": ["node_modules", "build"],
+  "ignore": [
+    "node_modules",
+    "build"
+  ],
   "delay": "1000"
 }

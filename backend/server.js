@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 // Configure CORS to allow requests from the frontend
 // Parse CORS_ORIGIN from env var - can be comma-separated list or single origin
-const corsOrigins = process.env.CORS_ORIGIN ? 
-  process.env.CORS_ORIGIN.split(',') : 
+const corsOrigins = process.env.CORS_ORIGIN ?
+  process.env.CORS_ORIGIN.split(',') :
   ['http://localhost:3000'];
 
 app.use(cors({

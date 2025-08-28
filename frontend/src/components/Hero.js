@@ -17,12 +17,12 @@ const Hero = () => {
   const [priority, setPriority] = useState('medium');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const taskInputRef = useRef(null);
-  
+
   // Calculate task statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = totalTasks - completedTasks;
-  
+
   // Handle click outside of the task input section
   useEffect(() => {
     function handleClickOutside(event) {
@@ -33,16 +33,16 @@ const Hero = () => {
         }
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [taskInputRef, newTaskText]);
-  
+
   // Convert string priority to number
   const getPriorityValue = (priorityStr) => {
-    switch(priorityStr) {
+    switch (priorityStr) {
       case 'high': return 3;
       case 'medium': return 2;
       case 'low': return 1;
@@ -56,14 +56,14 @@ const Hero = () => {
       setIsSubmitting(true);
       const priorityValue = getPriorityValue(priority);
       const dueDateValue = dueDate ? new Date(dueDate).toISOString() : null;
-      
+
       try {
         // Make sure to pass all properties: text, dueDate, priority, and category
         const result = await addTask(newTaskText, dueDateValue, priorityValue, selectedCategory);
-        
+
         if (result) {
           success('Task added successfully!');
-          
+
           // Reset form fields
           setNewTaskText('');
           setSelectedCategory('');
@@ -82,7 +82,7 @@ const Hero = () => {
       warning('Task text cannot be empty!');
     }
   };
-  
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -94,40 +94,40 @@ const Hero = () => {
     <div className="relative overflow-hidden mb-10 pb-20 pt-10">
       {/* Animated background orbs */}
       <div className="absolute inset-0 z-0">
-        <motion.div 
+        <motion.div
           className="absolute w-64 h-64 rounded-full bg-primary-purple opacity-20 blur-3xl"
-          animate={{ 
-            x: [0, 30, 0], 
-            y: [0, 20, 0] 
+          animate={{
+            x: [0, 30, 0],
+            y: [0, 20, 0]
           }}
-          transition={{ 
-            repeat: Infinity, 
+          transition={{
+            repeat: Infinity,
             duration: 8,
             ease: "easeInOut"
           }}
           style={{ top: '10%', left: '15%' }}
         />
-        <motion.div 
+        <motion.div
           className="absolute w-80 h-80 rounded-full bg-secondary-purple opacity-20 blur-3xl"
-          animate={{ 
-            x: [0, -20, 0], 
-            y: [0, 40, 0] 
+          animate={{
+            x: [0, -20, 0],
+            y: [0, 40, 0]
           }}
-          transition={{ 
-            repeat: Infinity, 
+          transition={{
+            repeat: Infinity,
             duration: 10,
             ease: "easeInOut"
           }}
           style={{ top: '20%', right: '10%' }}
         />
-        <motion.div 
+        <motion.div
           className="absolute w-72 h-72 rounded-full bg-primary-purple opacity-20 blur-3xl"
-          animate={{ 
-            x: [0, 30, 0], 
-            y: [0, -30, 0] 
+          animate={{
+            x: [0, 30, 0],
+            y: [0, -30, 0]
           }}
-          transition={{ 
-            repeat: Infinity, 
+          transition={{
+            repeat: Infinity,
             duration: 9,
             ease: "easeInOut"
           }}
@@ -137,7 +137,7 @@ const Hero = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4 pb-8">
         {/* Animated heading */}
-        <motion.h1 
+        <motion.h1
           className="text-5xl md:text-6xl font-bold text-white mb-6"
           style={{ lineHeight: 'normal', textShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' }}
           initial={{ opacity: 0, y: -20 }}
@@ -146,9 +146,9 @@ const Hero = () => {
         >
           Get Things Done!
         </motion.h1>
-        
+
         {/* Animated subheading */}
-        <motion.p 
+        <motion.p
           className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-10 max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -157,10 +157,10 @@ const Hero = () => {
           Transform your productivity with our advanced task management
           system. Organize, prioritize, and accomplish your goals with ease.
         </motion.p>
-        
+
         {/* Task summary for logged-in users */}
         {user && (
-          <motion.div 
+          <motion.div
             className="flex flex-wrap justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,14 +172,14 @@ const Hero = () => {
               </div>
               <span className="text-gray-800 dark:text-white">Total Tasks</span>
             </div>
-            
+
             <div className="bg-white/30 dark:bg-card-bg/30 backdrop-blur-md rounded-lg px-6 py-3 flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white">
                 <FaCheckCircle />
               </div>
               <span className="text-gray-800 dark:text-white">{completedTasks} Completed</span>
             </div>
-            
+
             <div className="bg-white/30 dark:bg-card-bg/30 backdrop-blur-md rounded-lg px-6 py-3 flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white">
                 <FaHourglassHalf />
@@ -189,15 +189,15 @@ const Hero = () => {
           </motion.div>
         )}
       </div>
-      
+
       {/* Quick Task Input Section */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 mt-10">
         <div className="bg-white/40 dark:bg-card-bg backdrop-blur-md rounded-lg p-4 shadow-lg" ref={taskInputRef}>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row gap-4">
-              <input 
-                type="text" 
-                placeholder="What is the task today?" 
+              <input
+                type="text"
+                placeholder="What is the task today?"
                 className="flex-grow bg-white/70 dark:bg-gray-800 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary-purple dark:text-white border border-transparent dark:border-gray-600"
                 value={newTaskText}
                 onChange={(e) => setNewTaskText(e.target.value)}
@@ -205,7 +205,7 @@ const Hero = () => {
                 onFocus={() => user && setIsInputFocused(true)}
                 disabled={!user}
               />
-              <button 
+              <button
                 className={`${user ? 'bg-primary-purple hover:bg-primary-hover' : 'bg-gray-400 cursor-not-allowed'} text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all`}
                 onClick={user ? handleAddTask : undefined}
                 disabled={!user || isSubmitting}
@@ -219,14 +219,14 @@ const Hero = () => {
                 )}
               </button>
             </div>
-            
+
             {/* Login/Register prompt for non-logged in users */}
             {!user && (
               <div className="text-center py-2 text-sm text-gray-600 dark:text-gray-400">
                 <Link to="/login" className="text-primary-purple hover:underline">Login</Link> or <Link to="/register" className="text-primary-purple hover:underline">Register</Link> to add and manage tasks
               </div>
             )}
-            
+
             {/* Additional options that appear when input is focused or has text */}
             {user && (isInputFocused || newTaskText.trim().length > 0) && (
               <div className="flex flex-col md:flex-row items-center gap-4 py-2 animate-fadeIn">
@@ -235,8 +235,8 @@ const Hero = () => {
                   <div className="absolute left-3 text-gray-500 dark:text-white">
                     <FaCalendar className="text-primary-purple dark:text-white" />
                   </div>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="w-full bg-white/70 dark:bg-gray-800 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary-purple border border-transparent dark:border-gray-600 dark:text-white"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
@@ -244,7 +244,7 @@ const Hero = () => {
                     placeholder="Select due date"
                   />
                 </div>
-                
+
                 {/* Priority Selector */}
                 <div className="flex items-center w-full md:w-1/2 relative">
                   <div className="absolute left-3 text-gray-500 dark:text-white">
@@ -269,25 +269,25 @@ const Hero = () => {
             )}
           </div>
           <div className="flex flex-wrap gap-3 mt-4">
-            <button 
+            <button
               className={`bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Work' ? 'ring-2 ring-indigo-500' : ''}`}
               onClick={() => setSelectedCategory('Work')}
             >
               <span className="w-5 h-5 flex items-center justify-center">🧰</span> Work
             </button>
-            <button 
+            <button
               className={`bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Personal' ? 'ring-2 ring-blue-500' : ''}`}
               onClick={() => setSelectedCategory('Personal')}
             >
               <span className="w-5 h-5 flex items-center justify-center">🏠</span> Personal
             </button>
-            <button 
+            <button
               className={`bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Health' ? 'ring-2 ring-green-500' : ''}`}
               onClick={() => setSelectedCategory('Health')}
             >
               <span className="w-5 h-5 flex items-center justify-center">💪</span> Health
             </button>
-            <button 
+            <button
               className={`bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-4 py-2 rounded-lg flex items-center gap-2 ${selectedCategory === 'Shopping' ? 'ring-2 ring-yellow-500' : ''}`}
               onClick={() => setSelectedCategory('Shopping')}
             >

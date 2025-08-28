@@ -47,7 +47,7 @@ export const TodoProvider = ({ children }) => {
   const [sortBy, setSortBy] = useState('newest');
   const [dueDate, setDueDate] = useState(null);
   const { user } = useContext(AuthContext);
-  
+
   // Load tasks when user is authenticated or when filter/sortBy changes
   useEffect(() => {
     if (user) {
@@ -62,7 +62,7 @@ export const TodoProvider = ({ children }) => {
           }
         }
       }
-      
+
       // Fetch from API
       fetchTasks();
     } else {
@@ -70,43 +70,43 @@ export const TodoProvider = ({ children }) => {
       setTasks([]);
     }
   }, [user]);
-  
+
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
     if (user) {
       localStorage.setItem(`tasks-${user._id}`, JSON.stringify(tasks));
     }
   }, [tasks, user]);
-  
+
   // Refetch tasks when filter or sort options change
   useEffect(() => {
     if (user) {
       fetchTasks();
     }
   }, [filter, sortBy]);
-  
+
   // Fetch all tasks from the API
   const fetchTasks = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
       // Include filter and sort parameters if they are set
       let url = API_URL;
       const params = new URLSearchParams();
-      
+
       if (filter && filter !== 'all') {
         params.append('filter', filter);
       }
-      
+
       if (sortBy) {
         params.append('sort', sortBy);
       }
-      
+
       if (params.toString()) {
         url += `?${params.toString()}`;
       }
-      
+
       const response = await axios.get(url);
       setTasks(response.data);
       setError(null);
@@ -117,29 +117,29 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Add a new task
   const addTask = async (text, dueDate = null, priority = 0, category = '') => {
     if (!text || text.trim() === '') {
       setError('Task text cannot be empty!');
       return false;
     }
-    
+
     setLoading(true);
     try {
       // Create task data object with all properties
-      const taskData = { 
-        text, 
+      const taskData = {
+        text,
         completed: false
       };
-      
+
       // Always include these properties in the request, even if null/empty
       taskData.dueDate = dueDate;
       taskData.priority = priority;
       taskData.category = category;
-      
+
       console.log("Sending task data:", taskData); // Debug log
-      
+
       const response = await axios.post(API_URL, taskData);
       setTasks([response.data, ...tasks]);
       setError(null);
@@ -152,14 +152,14 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Update an existing task
   const updateTask = async (id, updatedText, dueDate = null, priority = null, category = null) => {
     if (!updatedText || updatedText.trim() === '') {
       setError('Task text cannot be empty!');
       return;
     }
-    
+
     setLoading(true);
     try {
       // Get the existing task to preserve any fields we're not updating
@@ -167,14 +167,14 @@ export const TodoProvider = ({ children }) => {
       if (!existingTask) {
         throw new Error('Task not found');
       }
-      
+
       const updateData = {
         text: updatedText,
         dueDate: dueDate !== null ? dueDate : existingTask.dueDate,
         priority: priority !== null ? priority : existingTask.priority,
         category: category !== null ? category : existingTask.category
       };
-      
+
       const response = await axios.put(`${API_URL}/${id}`, updateData);
       setTasks(tasks.map(task => task._id === id ? response.data : task));
       setError(null);
@@ -185,12 +185,12 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Toggle task completion status
   const toggleComplete = async (id) => {
     const taskToToggle = tasks.find(task => task._id === id);
     if (!taskToToggle) return;
-    
+
     setLoading(true);
     try {
       const response = await axios.patch(`${API_URL}/${id}/toggle`);
@@ -203,7 +203,7 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Delete a task
   const deleteTask = async (id) => {
     setLoading(true);
@@ -218,7 +218,7 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Reorder tasks (for drag and drop functionality)
   const reorderTasks = (startIndex, endIndex) => {
     const result = Array.from(tasks);
@@ -226,14 +226,14 @@ export const TodoProvider = ({ children }) => {
     result.splice(endIndex, 0, removed);
     setTasks(result);
   };
-  
+
   // Delete multiple tasks at once
   const deleteMultipleTasks = async (taskIds) => {
     if (!taskIds.length) {
       console.log('No tasks to delete (empty taskIds array)');
       return;
     }
-    
+
     console.log(`Deleting multiple tasks. Task IDs:`, taskIds);
     setLoading(true);
     try {
@@ -242,11 +242,11 @@ export const TodoProvider = ({ children }) => {
         console.log(`Sending DELETE request for task ${id}`);
         return axios.delete(`${API_URL}/${id}`);
       });
-      
+
       // Wait for all delete operations to complete
       await Promise.all(deletePromises);
       console.log('All delete operations completed successfully');
-      
+
       // Remove the deleted tasks from state
       setTasks(prevTasks => {
         const newTasks = prevTasks.filter(task => !taskIds.includes(task._id));
@@ -261,45 +261,45 @@ export const TodoProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+
   // Delete all completed tasks
   const deleteCompletedTasks = async () => {
     console.log('deleteCompletedTasks function called');
     console.log('Current tasks:', tasks);
-    
+
     const completedTaskIds = tasks
       .filter(task => task.completed)
       .map(task => task._id);
-      
+
     console.log('Completed tasks IDs:', completedTaskIds);
-      
+
     if (completedTaskIds.length === 0) {
       console.log('No completed tasks to delete');
       return; // No completed tasks to delete
     }
-    
+
     console.log(`Deleting ${completedTaskIds.length} completed tasks`);
     await deleteMultipleTasks(completedTaskIds);
     console.log('Completed tasks deletion finished');
   };
-  
+
   // Get filtered tasks (mostly used for search functionality)
   const getFilteredTasks = () => {
     // The server already handles filter and sort, we just need to handle searchTerm here
     let filteredTasks = [...tasks];
-    
+
     // Apply search filtering if needed
     if (searchTerm.trim() !== '') {
-      filteredTasks = filteredTasks.filter(task => 
+      filteredTasks = filteredTasks.filter(task =>
         task.text.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
+
     return filteredTasks;
   };
-  
+
   return (
-    <TodoContext.Provider 
+    <TodoContext.Provider
       value={{
         tasks,
         loading,

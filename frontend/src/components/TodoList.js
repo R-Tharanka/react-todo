@@ -5,11 +5,11 @@ import TodoItem from './TodoItem';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { FaEye, FaTasks } from 'react-icons/fa';
 
-const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = () => {} }) => {
+const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = () => { } }) => {
   const { getFilteredTasks, reorderTasks } = useContext(TodoContext);
   const { user } = useContext(AuthContext);
   const filteredTasks = getFilteredTasks();
-  
+
   // Toggle task selection
   const toggleTaskSelection = (taskId) => {
     console.log(`Toggling selection for task ID: ${taskId}`);
@@ -42,7 +42,7 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
         <FaEye className="mx-auto text-4xl mb-3 text-primary-purple opacity-70" />
         <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">Preview Mode</h3>
         <p className="text-gray-600 dark:text-gray-400 mb-2">
-          You're viewing the app in preview mode. 
+          You're viewing the app in preview mode.
           <br />Login to manage your personal tasks.
         </p>
         <div className="mt-4 space-y-3">
@@ -52,11 +52,10 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
             { text: "Schedule team meeting", completed: false }
           ].map((demoTask, index) => (
             <div key={index} className="bg-white dark:bg-card-bg shadow-sm rounded-lg px-4 py-3 flex items-center opacity-80">
-              <div className={`w-5 h-5 rounded-full border-2 mr-3 flex-shrink-0 ${
-                demoTask.completed 
-                  ? 'bg-primary-purple border-primary-purple' 
+              <div className={`w-5 h-5 rounded-full border-2 mr-3 flex-shrink-0 ${demoTask.completed
+                  ? 'bg-primary-purple border-primary-purple'
                   : 'border-gray-400 dark:border-gray-600'
-              }`}></div>
+                }`}></div>
               <p className={`${demoTask.completed ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-white'}`}>
                 {demoTask.text}
               </p>
@@ -66,7 +65,7 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
       </div>
     );
   }
-  
+
   if (filteredTasks.length === 0) {
     return (
       <div className="text-center text-gray-500 dark:text-gray-400 py-8">
@@ -80,15 +79,15 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <Droppable droppableId="tasks-list">
         {(provided) => (
-          <ul 
+          <ul
             className="mt-6 space-y-3 w-full px-1 custom-scrollbar overflow-x-clip"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
             {filteredTasks.map((task, index) => (
-              <Draggable 
-                key={task._id} 
-                draggableId={task._id} 
+              <Draggable
+                key={task._id}
+                draggableId={task._id}
                 index={index}
               >
                 {(provided, snapshot) => (
@@ -99,7 +98,7 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
                     className={`${snapshot.isDragging ? "shadow-lg ring-2 ring-primary-purple" : ""} ${selectMode ? "relative overflow-hidden" : ""} mb-2 group`}
                   >
                     {selectMode && (
-                      <div 
+                      <div
                         className={`absolute left-0 top-0 bottom-0 w-12 px-3 flex items-center justify-center ${selectedTasks.includes(task._id) ? 'bg-primary-purple/10 dark:bg-primary-purple/20' : 'bg-primary-purple/5 dark:bg-primary-purple/10'} rounded-l-lg z-10 group-hover:shadow-md transition-all duration-200 ease-in-out border-r border-gray-200/50 dark:border-gray-600/50`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -108,8 +107,8 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
                       >
                         <div className="flex flex-col items-center">
                           <div className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center cursor-pointer transition-all duration-200
-                            ${selectedTasks.includes(task._id) 
-                              ? 'bg-primary-purple border-primary-purple scale-110' 
+                            ${selectedTasks.includes(task._id)
+                              ? 'bg-primary-purple border-primary-purple scale-110'
                               : 'border-gray-400 dark:border-gray-500 bg-white/80 dark:bg-gray-700/80 hover:border-primary-purple hover:scale-105'}`}
                           >
                             {selectedTasks.includes(task._id) && (
@@ -122,8 +121,8 @@ const TodoList = ({ selectMode = false, selectedTasks = [], setSelectedTasks = (
                         </div>
                       </div>
                     )}
-                    <TodoItem 
-                      task={task} 
+                    <TodoItem
+                      task={task}
                       selectMode={selectMode}
                       isSelected={selectedTasks.includes(task._id)}
                     />

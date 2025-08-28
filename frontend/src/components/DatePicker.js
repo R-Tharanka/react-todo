@@ -65,25 +65,25 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
   const renderCalendarDays = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
-    
+
     const days = [];
-    
+
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < firstDayOfMonth; i++) {
       days.push(<div key={`empty-${i}`} className="w-8 h-8"></div>);
     }
-    
+
     // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
       const isSelected = selectedDate && new Date(selectedDate).toDateString() === date.toDateString();
       const isToday = new Date().toDateString() === date.toDateString();
-      
+
       days.push(
         <button
           key={day}
           className={`w-8 h-8 rounded-full flex items-center justify-center text-sm
-            ${isSelected ? 'bg-primary-purple text-white' : 
+            ${isSelected ? 'bg-primary-purple text-white' :
               isToday ? 'bg-gray-200 dark:bg-gray-700' : ''} 
             hover:bg-gray-200 dark:hover:bg-gray-700`}
           onClick={() => handleDateClick(day)}
@@ -92,7 +92,7 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
         </button>
       );
     }
-    
+
     return days;
   };
 
@@ -104,10 +104,9 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
 
   return (
     <div className="relative" ref={calendarRef}>
-      <div 
-        className={`flex items-center px-3 py-2 rounded-lg border ${
-          selectedDate ? 'border-primary-purple' : 'border-gray-300 dark:border-gray-600'
-        } cursor-pointer`}
+      <div
+        className={`flex items-center px-3 py-2 rounded-lg border ${selectedDate ? 'border-primary-purple' : 'border-gray-300 dark:border-gray-600'
+          } cursor-pointer`}
         onClick={toggleCalendar}
       >
         <FaCalendarAlt className="text-gray-500 dark:text-gray-400 mr-2" />
@@ -115,7 +114,7 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
           {selectedDate ? formatSelectedDate() : 'Set due date'}
         </span>
         {selectedDate && (
-          <button 
+          <button
             onClick={clearDate}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
             aria-label="Clear date"
@@ -124,11 +123,11 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
           </button>
         )}
       </div>
-      
+
       {isOpen && (
         <div className="absolute mt-1 bg-white dark:bg-card-bg rounded-lg shadow-lg p-2 z-10">
           <div className="flex justify-between items-center mb-2 px-1">
-            <button 
+            <button
               onClick={goToPreviousMonth}
               className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
             >
@@ -137,14 +136,14 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
             <div className="font-medium">
               {new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </div>
-            <button 
+            <button
               onClick={goToNextMonth}
               className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
             >
               &gt;
             </button>
           </div>
-          
+
           <div className="grid grid-cols-7 gap-1 text-center">
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
               <div key={index} className="w-8 h-8 text-gray-500 dark:text-gray-400 text-sm font-medium">

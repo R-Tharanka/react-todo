@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       const darkModePref = localStorage.getItem('darkMode');
       const userInfo = localStorage.getItem('userInfo');
       let darkMode = 'system';
-      
+
       if (userInfo) {
         try {
           const parsedUser = JSON.parse(userInfo);
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
           darkMode = darkModePref || 'system';
         }
       }
-      
+
       // Apply dark mode based on preference
       if (darkMode === 'dark') {
         document.documentElement.classList.add('dark');
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
         }
       }
     };
-    
+
     initializeDarkMode();
   }, []);
 
@@ -49,11 +49,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       try {
         const userInfo = localStorage.getItem('userInfo');
-        
+
         if (userInfo) {
           const parsedUser = JSON.parse(userInfo);
           setUser(parsedUser);
-          
+
           // Configure axios default headers for protected routes
           axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
         }
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    
+
     checkLoggedIn();
   }, []);
 
@@ -78,17 +78,17 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       });
-      
+
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
-      
+
       // Set auth token in axios defaults
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-      
+
       return data;
     } catch (error) {
-      const message = error.response && error.response.data.message 
-        ? error.response.data.message 
+      const message = error.response && error.response.data.message
+        ? error.response.data.message
         : 'Registration failed';
       setError(message);
       throw new Error(message);
@@ -106,17 +106,17 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       });
-      
+
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
-      
+
       // Set auth token in axios defaults
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-      
+
       return data;
     } catch (error) {
-      const message = error.response && error.response.data.message 
-        ? error.response.data.message 
+      const message = error.response && error.response.data.message
+        ? error.response.data.message
         : 'Login failed';
       setError(message);
       throw new Error(message);
@@ -129,10 +129,10 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('userInfo');
     setUser(null);
-    
+
     // Remove auth token from axios defaults
     delete axios.defaults.headers.common['Authorization'];
-    
+
     // Redirect to home page
     window.location.href = '/';
   };
@@ -144,20 +144,20 @@ export const AuthProvider = ({ children }) => {
     try {
       // Apply dark mode preference if it exists
       if (userData.preferences?.darkMode) {
-        const prefersDark = userData.preferences.darkMode === 'dark' || 
+        const prefersDark = userData.preferences.darkMode === 'dark' ||
           (userData.preferences.darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          
+
         if (prefersDark) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
-        
+
         localStorage.setItem('darkMode', userData.preferences.darkMode);
       }
-      
+
       const { data } = await axios.put(`${API.baseURL}/api/users/profile`, userData);
-      
+
       // Update user state with new data
       setUser(prev => ({
         ...prev,
@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }) => {
           ...(userData.preferences || {}),
         }
       }));
-      
+
       // Save updated user to localStorage
       const updatedUser = {
         ...user,
@@ -178,11 +178,11 @@ export const AuthProvider = ({ children }) => {
         }
       };
       localStorage.setItem('userInfo', JSON.stringify(updatedUser));
-      
+
       return data;
     } catch (error) {
-      const message = error.response && error.response.data.message 
-        ? error.response.data.message 
+      const message = error.response && error.response.data.message
+        ? error.response.data.message
         : 'Profile update failed';
       setError(message);
       throw new Error(message);
