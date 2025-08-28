@@ -17,7 +17,7 @@ import Hero from '../components/Hero';
 import ProductivityTips from '../components/ProductivityTips';
 import { TodoContext } from '../context/TodoContext';
 import { useNotification } from '../context/NotificationContext';
-import { FaSpinner, FaClipboardList, FaTrash, FaTimes } from 'react-icons/fa';
+import { FaSpinner, FaClipboardList } from 'react-icons/fa';
 
 const HomePage = () => {
   // Get task-related functions and state from context
