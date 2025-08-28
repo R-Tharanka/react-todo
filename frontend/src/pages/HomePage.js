@@ -233,6 +233,7 @@ const HomePage = () => {
               <div 
                 className={`${selectMode ? 'max-h-[30rem] sm:max-h-[31rem] md:max-h-[33rem]' : 'max-h-[33rem] sm:max-h-[34rem] md:max-h-[36rem]'} min-h-[10rem] overflow-y-auto overflow-x-hidden px-2 custom-scrollbar task-container`}
                 id="task-scroll-container"
+                style={{ willChange: 'transform', overflowX: 'clip' }}
               >
                 <TodoList 
                   selectMode={selectMode}

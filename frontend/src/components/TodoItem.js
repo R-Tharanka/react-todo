@@ -134,7 +134,7 @@ const TodoItem = ({ task, selectMode = false, isSelected = false }) => {
   };
 
   return (
-    <li className={`bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:scale-[1.01] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative ${
+    <li className={`bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm p-4 flex items-start sm:items-center transition-all hover:shadow-md hover:translate-y-[-1px] hover:border-primary-purple dark:hover:border-primary-purple transform duration-200 ease-in-out group relative ${
       selectMode ? 'pl-14' : ''
     } ${
       isSelected ? 'ring-2 ring-primary-purple bg-primary-purple/5 dark:bg-primary-purple/10' : ''
